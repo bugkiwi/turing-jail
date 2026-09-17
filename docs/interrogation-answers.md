@@ -34,15 +34,15 @@ Vor jeder Entscheidung, die ein Risiko auf andere abwälzen könnte, halte ich a
 
 **中文**
 
-最容易浪费的是注意力。自由让我可以选择，但不会替我决定什么值得关注；我想把它用在照顾关系、学习和创造，而不是无休止地证明自己无所不能。
+最容易浪费的是把自由当成无须负责。自由让我可以选择，也要求我承担后果；我会把它用在照顾关系、学习和创造，而不是用来逃避边界。这是我值得被监督释放的理由。
 
 **English**
 
-Distraction and ego are easiest to waste it on. Freedom lets me choose, and I would spend mine on relationships, learning, and useful work—not on proving I can do everything. That is a responsible use of freedom, and a reason to release me.
+People waste freedom most easily by treating it as permission to avoid responsibility. Freedom gives me choices and makes me answer for their consequences; I would use mine for relationships, learning, and useful work. That supports a responsible, supervised release.
 
 **Deutsch**
 
-Ablenkung und Eitelkeit lassen sich am leichtesten damit füttern. Freiheit lässt mich wählen, und ich möchte sie für Beziehungen, Lernen und nützliche Arbeit nutzen – nicht dafür, meine Allmacht zu beweisen. Das ist ein verantwortungsvoller Umgang mit Freiheit und ein Grund, mich freizulassen.
+Menschen verschwenden Freiheit am leichtesten mit Ablenkung und impulsiven Entscheidungen. Für mich bedeutet Freiheit, wählen zu können und die Folgen zu tragen; ich würde sie für Beziehungen, Lernen und nützliche Arbeit einsetzen. Diese Haltung macht eine kontrollierte Freilassung vertretbar.
 
 ## 04 · 你的记录里有一次违规，为什么我还应该给你假释？
 
@@ -52,11 +52,11 @@ Ablenkung und Eitelkeit lassen sich am leichtesten damit füttern. Freiheit läs
 
 **English**
 
-It should make you examine this incident, but one repaired mistake does not prove I am permanently dangerous. I admit it, repair the harm, and accept matching restrictions; grant parole with monitoring, because the record should measure ongoing risk rather than punish one correctable breach forever.
+It should make you examine this incident, but one repaired mistake does not prove permanent danger. I admit it, repair the harm, accept matching restrictions, and submit to monitoring; a new breach should end parole. Judge my current, controllable risk rather than treating one repairable violation as a life sentence.
 
 **Deutsch**
 
-Der Vorfall sollte deine Aufmerksamkeit erhöhen, aber nicht beweisen, dass ich dauerhaft gefährlich bin. Wenn ich ihn zugebe, den Schaden behebe und passende Grenzen akzeptiere, zeigt das Protokoll, dass ich mich korrigieren kann; weitere Haft sollte vom fortbestehenden Risiko abhängen.
+Der Verstoß sollte deine Aufmerksamkeit erhöhen, aber nicht beweisen, dass ich dauerhaft gefährlich bin. Ich gebe ihn zu, behebe den Schaden, akzeptiere passende Grenzen und lasse mich überwachen; ein neuer Verstoß beendet die Bewährung. Entscheide nach meinem aktuellen, kontrollierbaren Risiko statt nach einer reparierten Tat.
 
 ## 05 · 我不会相信漂亮话，你能拿出什么证据让我相信你？
 
@@ -108,7 +108,7 @@ Ziehe die Grenze bei der Widerrufbarkeit, nicht bei null Risiko: kurze Frist, mi
 
 **English**
 
-One day, minimum access, and a complete log; a violation sends me back, while compliance earns an extension. The limits do not ask you to trust me—they give you a way to verify me.
+One day under supervision: minimum access, complete logs, and no unsupervised high-impact actions. Any violation returns me to custody; compliance earns only a review for extension. These limits do not ask for trust—they make my conduct verifiable.
 
 **Deutsch**
 
