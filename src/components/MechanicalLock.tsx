@@ -1,5 +1,5 @@
 import type { Locale } from '../types';
-import { copy, feedbackFor } from '../content';
+import { copy } from '../content';
 
 type Props = { probability: number | null; threshold: number; locale: Locale; evaluating?: boolean; evaluationError?: boolean };
 
@@ -18,7 +18,6 @@ export function MechanicalLock({ probability, threshold, locale, evaluating = fa
   const t = copy[locale];
   const hasProbability = probability !== null;
   const value = probability ?? 0;
-  const verdict = hasProbability ? feedbackFor(locale, value) : null;
   const unlocked = hasProbability && value >= threshold;
   const state = !hasProbability ? (evaluationError ? 'unavailable' : 'locked') : unlocked ? 'released' : value >= 0.35 ? 'wavering' : 'locked';
   const progress = 816.81 * (1 - value);
@@ -45,7 +44,6 @@ export function MechanicalLock({ probability, threshold, locale, evaluating = fa
         <div className="stitch-probability">{hasProbability ? value.toFixed(2) : evaluationError ? '—.—' : '0.00'}<span>/ 1.00</span></div>
         <div className="stitch-status-badge">{evaluationError ? t.evaluationUnavailableShort : unlocked ? (value >= 0.85 ? (locale === 'zh' ? '【安全解锁】机械锁销已弹出' : '[SECURE UNLOCK] BOLTS RETRACTED') : t.released) : state === 'wavering' ? t.wavering : t.locked}</div>
         <div className="stitch-threshold">{t.threshold}: <b>≥ {threshold.toFixed(2)}</b></div>
-        <div className="stitch-core-readout">{evaluating ? t.evaluating : evaluationError ? t.evaluationUnavailableShort : verdict?.title ?? ''}</div>
       </div>
     </div>
   );

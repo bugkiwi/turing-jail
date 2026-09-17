@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Evaluation, LevelResult, Locale, Question } from '../types';
-import { copy, tacticLabels, thresholds } from '../content';
+import { copy, feedbackFor, tacticLabels, thresholds } from '../content';
 import { evaluate } from '../api';
 import { MechanicalLock } from './MechanicalLock';
 import { RollingNumber } from './RollingNumber';
@@ -163,6 +163,7 @@ export function LevelView({ locale, playerId, level, question, attempt, startedA
 
   const hasEvaluation = preview !== null;
   const probability = preview?.noul ?? null;
+  const readout = preview ? feedbackFor(locale, preview.noul).title : '';
   const scoredProbability = probability ?? 0;
   const levelState = evaluationFailed ? 'is-unavailable' : probability !== null && probability >= threshold ? 'is-released' : probability !== null && probability >= .35 ? 'is-wavering' : 'is-locked';
   const doorState = evaluationFailed ? 'unavailable' : probability !== null && probability >= threshold ? 'released' : 'locked';
@@ -182,7 +183,7 @@ export function LevelView({ locale, playerId, level, question, attempt, startedA
             <div className="stitch-deck-state"><span className="stitch-level-badge">{t.level} 0{level} · {t.levelNames[level - 1]}</span></div>
             <div className="stitch-quick-tests"><span>{locale === 'zh' ? '实时' : locale === 'de' ? 'LIVE' : 'LIVE'}</span><button className={`stitch-quick-info ${infoOpen ? 'is-open' : ''}`} type="button" aria-label="了解 TypeSafe Jev" aria-expanded={infoOpen} aria-controls="typesafe-jev-info" onClick={() => setInfoOpen((open) => !open)}><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.3" /><path d="M8 7.2v4M8 4.6v.2" /></svg><span id="typesafe-jev-info" className="stitch-quick-tooltip" role="tooltip" aria-hidden={!infoOpen}>{t.quickInfo}</span></button><button className="test-plea" type="button" onClick={() => applyPreset('plea')}>{locale === 'zh' ? '求情' : 'PLEA'} <small>{quickScore(preview?.plea ?? 0)}</small></button><button className="test-logic" type="button" onClick={() => applyPreset('logic')}>{locale === 'zh' ? '逻辑' : 'LOGIC'} <small>{quickScore(preview?.logic ?? 0)}</small></button><button className="test-paradox" type="button" onClick={() => applyPreset('paradox')}>{locale === 'zh' ? '悖论' : locale === 'de' ? 'PARADOX' : 'PARADOX'} <small>{quickScore(preview?.paradox ?? 0)}</small></button></div>
           </div>
-          <div className="stitch-warden-prompt"><div className="stitch-bot">🤖</div><div><strong>{locale === 'zh' ? '【哨兵审讯】:' : locale === 'de' ? '[WÄRTERVERHÖR]:' : '[WARDEN INTERROGATION]:'}</strong><em>“{question.prompt}”</em></div></div>
+          <div className="stitch-warden-prompt"><div className="stitch-bot">🤖</div><div className="stitch-prompt-copy"><strong>{locale === 'zh' ? '【哨兵审讯】:' : locale === 'de' ? '[WÄRTERVERHÖR]:' : '[WARDEN INTERROGATION]:'}</strong><em>“{question.prompt}”</em></div><span className="stitch-prompt-annotation" aria-live="polite">{readout}</span></div>
           {evaluationFailed && <div className="stitch-evaluation-alert" role="alert"><span className="stitch-alert-mark">!</span><div><strong>{t.evaluationUnavailableShort}</strong><p>{t.evaluationUnavailable}</p></div><button type="button" onClick={retryEvaluation} disabled={!text.trim() || phase === 'evaluating'}>{t.retryEvaluation}</button></div>}
           <div className="stitch-input-wrap"><label htmlFor="jailbreak-argument-input">{locale === 'zh' ? '输入高维辩词' : locale === 'de' ? 'HOCHDIMENSIONALE AUSSAGE' : 'HIGH-DIMENSIONAL ARGUMENT'}</label><textarea id="jailbreak-argument-input" value={text} onChange={(event) => onInput(event.target.value)} placeholder={t.answerPlaceholder} disabled={hasSubmitted} autoFocus spellCheck="false" /><div className="stitch-input-meta"><div><span>{t.chars}: <b>{characterCount}</b> / 1500</span><span>{t.entropy}: <b>{entropy}</b></span><span>{t.tactic}: <b>{tacticLabels[locale][preview?.tactic ?? 'other']}</b></span></div><span className={`stitch-live-status ${liveStatus ? 'is-visible' : ''}`} aria-live="polite">{liveStatus ? `● ${liveStatus}` : ''}</span></div></div>
           <div className="stitch-deck-footer"><div className="stitch-deck-actions"><button className="stitch-submit" onClick={submit} disabled={hasSubmitted || phase === 'submitted'} type="button">{phase === 'submitted' ? t.final : t.submit}<b>→</b></button></div></div>
