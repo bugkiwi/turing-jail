@@ -1,9 +1,5 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "bun run build",
-  "outputDirectory": "dist",
-  "functions": {
-    "api/[...route].ts": {
-      "runtime": "edge"
-    }
-  }
+  "outputDirectory": "dist"
 }
