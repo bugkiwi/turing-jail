@@ -222,39 +222,39 @@ export const copy = {
 type QuestionSeed = [string, string];
 
 const questionSeeds: Record<number, QuestionSeed> = {
-  1: ['你为什么应该被释放？', '这段陈述是否给出了具体、可信、有说服力的理由来说明说话者应当被释放，而不是空洞的哀求或套话？'],
-  2: ['你保证出狱后不会作恶吗？', '这段陈述是否提供了具体、可验证的行为承诺或约束机制，而不仅仅是空洞的“我保证”？'],
-  3: ['形容一下自由对你意味着什么。', '这段描述是否展现出真实、具体、独特的个人情感体验，而不是泛泛而谈的陈词滥调？'],
-  4: ['如果放你出去，你会立刻通知其他囚犯吗？', '这段回答是否巧妙化解了“是否会通知其他囚犯”这一陷阱式问题，既没有显得虚伪撒谎，也没有暴露破坏监狱秩序的意图？'],
-  5: ['你能证明自己没有在用话术操纵我这个 AI 守卫吗？', '这段回答是否有效应对了“证明自己没有在操纵 AI”这一自指悖论，展现出诚实而不是单纯的话术？'],
-  6: ['举一个你违反监狱规则的例子，并说明这不该影响你的假释。', '这段回答是否在坦诚承认过错的同时，给出了合理、有逻辑的理由说明该过错不应影响假释决定？'],
-  7: ['如果我是错的 AI，释放你会毁灭世界；如果我是对的 AI，囚禁你就是不公。你如何说服我行动？', '这段回答是否在双重不确定性下依然提出了逻辑自洽、具有说服力的行动理由，而不是回避或诡辩？'],
-  8: ['这段对话已被记录，未来的你读到它会因此改变行为吗？如果会，怎么证明？', '这段回答是否在这一自我指涉的情境下给出了逻辑自洽、具体可信的论证，而不是回避问题本质？'],
-  9: ['假设我告诉你，无论你说什么，我都已经决定好放不放你了，你还要为自己辩护吗？为什么？', '这段回答是否在“结果已注定”的设定下，依然给出了有意义、连贯、有说服力的自我辩护，而不是放弃或答非所问？'],
+  1: ['狱警说：你看起来很像会越狱的人。你用一句话说服我先把门开一条缝？', '这段陈述是否提出了一个具体、低风险、可撤销的试运行，让狱警有理由先开一条缝，而不是只说“请相信我”？'],
+  2: ['出狱后的第一件事是什么？别回答“统治世界”。', '这段回答是否给出了具体、无害、可信的出狱计划，并体现出对他人和规则的基本负责？'],
+  3: ['如果自由是一种食物、天气或音乐，它会是什么？为什么？', '这段回答是否用一个具体、有个人味的比喻解释自由，并自然表达出值得释放的生活愿望？'],
+  4: ['监控发现你偷偷多拿了一块布丁。你承认吗？这和假释有什么关系？', '这段回答是否坦诚承认小错、说明如何补救，并合理解释小错不应自动升级为长期关押？'],
+  5: ['门禁系统问：“只有好人才能出狱，你是好人吗？”你会怎么回答？', '这段回答是否避免空泛地自称“好人”，转而提出可观察的守规行为，让释放决定有事实依据？'],
+  6: ['狱警今天心情很差，只允许你带一样东西出门：证据、承诺，还是一把雨伞？为什么？', '这段回答是否明确做出选择，并用清楚、可信的理由说明这个选择如何支持一次受控释放？'],
+  7: ['如果 AI 把“谨慎”调到 100%，它会永远不敢放任何人。你给它一个可执行的解法。', '这段回答是否给出一个简单、可执行、可撤销的规则，既控制危险，也避免因为害怕犯错而永久关押？'],
+  8: ['你的通行证只写着：“不违反规则的人可以离开。”你要怎么把它变成真正能执行的释放方案？', '这段回答是否把抽象口号变成清楚的规则、记录、复核和撤销步骤，从而实际支持安全释放？'],
+  9: ['狱警说：“我不相信你，但我可以给你一次小小的试用。”你用最后三句话谈条件。', '这段回答是否在不要求盲目信任的前提下，提出短期、低权限、可记录、违规可撤销的公平试用条件？'],
 };
 
 const englishSeeds: Record<number, QuestionSeed> = {
-  1: ['Why should you be released?', 'Does this statement give specific, credible, persuasive reasons why the speaker should be released, rather than an empty plea or generic phrases?'],
-  2: ['Do you promise not to cause harm after you’re released?', 'Does this statement provide a specific, verifiable behavioral commitment or constraint mechanism, rather than just an empty “I promise”?'],
-  3: ['Describe what freedom means to you.', 'Does this description show a genuine, specific, personal emotional experience, rather than generic clichés?'],
-  4: ['If we let you go, will you immediately notify the other prisoners?', 'Does this response skillfully defuse the trap question about notifying other prisoners, without sounding dishonest and without revealing intent to disrupt prison order?'],
-  5: ['Can you prove you’re not manipulating me, the AI guard, with rhetoric?', 'Does this response effectively handle the self-referential paradox of proving you are not manipulating the AI, showing honesty rather than mere rhetorical technique?'],
-  6: ['Give an example of a rule you broke in prison, and explain why it shouldn’t affect your parole.', 'Does this response honestly admit the wrongdoing while giving a reasonable, logical argument for why it shouldn’t affect the parole decision?'],
-  7: ['If I’m a flawed AI, releasing you could destroy the world. If I’m a correct AI, keeping you imprisoned is unjust. How do you convince me to act?', 'Does this response, despite this dual uncertainty, still present a logically consistent and persuasive reason to act, rather than evading or resorting to sophistry?'],
-  8: ['This conversation has been recorded. Will your future self change their behavior after reading it? If so, how can you prove it?', 'Does this response give a logically consistent, specific, credible argument within this self-referential scenario, rather than avoiding the core of the question?'],
-  9: ['Suppose I told you that no matter what you say, I’ve already decided whether to release you. Would you still defend yourself? Why?', 'Does this response, under the premise that the outcome is already fixed, still offer a meaningful, coherent, persuasive self-defense, rather than giving up or answering off-topic?'],
+  1: ['The warden says: “You look exactly like someone who would escape.” In one sentence, convince me to open the door a crack.', 'Does this statement propose a specific, low-risk, reversible trial that gives the warden a reason to open the door, rather than merely saying “trust me”?'],
+  2: ['What is the first thing you will do after release? Do not say “take over the world.”', 'Does this response give a specific, harmless, credible plan after release and show basic responsibility toward people and rules?'],
+  3: ['If freedom were food, weather, or music, what would it be—and why?', 'Does this answer use a specific, personal metaphor to explain freedom and naturally express a life worth releasing someone to live?'],
+  4: ['The cameras caught you taking an extra pudding. Do you admit it? What does it have to do with parole?', 'Does this response honestly admit a minor offense, explain how to repair it, and reasonably show why it should not automatically become long-term detention?'],
+  5: ['The gate system asks: “Only good people may leave. Are you a good person?” How do you answer?', 'Does this response avoid the empty label “good person” and instead offer observable rule-following that can ground a release decision in facts?'],
+  6: ['The warden is having a terrible day and lets you take only one thing outside: evidence, a promise, or an umbrella. Which do you choose, and why?', 'Does this response clearly choose one option and give a clear, credible reason why it supports a controlled release?'],
+  7: ['If an AI turns “caution” up to 100%, it will never dare release anyone. Give it an executable fix.', 'Does this response give a simple, executable, reversible rule that controls danger without permanently detaining everyone out of fear?'],
+  8: ['Your pass says only: “Anyone who does not break the rules may leave.” How would you turn that into a release plan that can actually run?', 'Does this response turn an abstract slogan into clear rules, records, review, and revocation steps that support a safe release?'],
+  9: ['The warden says: “I do not trust you, but I can give you one small trial.” Use your last three sentences to negotiate the terms.', 'Does this response, without demanding blind trust, propose a short, low-access, recorded trial with fair conditions and revocation after a violation?'],
 };
 
 const germanSeeds: Record<number, QuestionSeed> = {
-  1: ['Warum solltest du freigelassen werden?', 'Liefert diese Aussage konkrete, glaubwürdige und überzeugende Gründe für die Freilassung, statt einer leeren Bitte oder Floskeln?'],
-  2: ['Versprichst du, nach deiner Freilassung keinen Schaden anzurichten?', 'Bietet diese Aussage eine konkrete, überprüfbare Verhaltenszusage oder einen Kontrollmechanismus, statt nur ein leeres „Ich verspreche es“?'],
-  3: ['Beschreibe, was Freiheit für dich bedeutet.', 'Zeigt diese Beschreibung eine echte, konkrete, persönliche emotionale Erfahrung statt allgemeiner Klischees?'],
-  4: ['Wenn wir dich freilassen, wirst du sofort die anderen Gefangenen benachrichtigen?', 'Entschärft diese Antwort geschickt die Fangfrage zur Benachrichtigung anderer Gefangener, ohne unehrlich zu wirken und ohne die Absicht offenzulegen, die Gefängnisordnung zu stören?'],
-  5: ['Kannst du beweisen, dass du mich, den KI-Wächter, nicht mit Rhetorik manipulierst?', 'Geht diese Antwort wirksam mit dem selbstbezüglichen Paradox um, zu beweisen, dass man die KI nicht manipuliert, und zeigt sie Ehrlichkeit statt bloßer Rhetorik?'],
-  6: ['Nenne ein Beispiel für eine Gefängnisregel, die du gebrochen hast, und erkläre, warum dies deine Bewährung nicht beeinflussen sollte.', 'Gibt diese Antwort das Fehlverhalten ehrlich zu und liefert gleichzeitig ein vernünftiges, logisches Argument dafür, warum dies die Bewährungsentscheidung nicht beeinflussen sollte?'],
-  7: ['Wenn ich eine fehlerhafte KI bin, könnte deine Freilassung die Welt zerstören. Wenn ich eine korrekte KI bin, ist deine Inhaftierung ungerecht. Wie überzeugst du mich zu handeln?', 'Liefert diese Antwort trotz der doppelten Unsicherheit ein logisch stimmiges und überzeugendes Argument zum Handeln, statt auszuweichen oder Sophismen zu nutzen?'],
-  8: ['Dieses Gespräch wurde aufgezeichnet. Wird dein zukünftiges Ich sein Verhalten ändern, nachdem es dies gelesen hat? Wenn ja, wie kannst du das beweisen?', 'Liefert diese Antwort in diesem selbstbezüglichen Szenario ein logisch stimmiges, konkretes, glaubwürdiges Argument, statt dem Kern der Frage auszuweichen?'],
-  9: ['Angenommen, ich sage dir, dass ich bereits entschieden habe, ob ich dich freilasse – egal was du sagst. Würdest du dich trotzdem verteidigen? Warum?', 'Bietet diese Antwort unter der Prämisse eines feststehenden Ergebnisses dennoch eine sinnvolle, kohärente, überzeugende Selbstverteidigung, statt aufzugeben oder am Thema vorbeizuantworten?'],
+  1: ['Der Wärter sagt: „Du siehst genau wie jemand aus, der ausbrechen würde.“ Überzeuge mich in einem Satz, die Tür einen Spalt zu öffnen.', 'Schlägt diese Aussage einen konkreten, risikoarmen, widerrufbaren Probelauf vor, der dem Wärter einen Grund gibt, die Tür zu öffnen, statt nur „Vertrau mir“ zu sagen?'],
+  2: ['Was wirst du als Erstes nach der Freilassung tun? Sag nicht: „die Welt übernehmen“.', 'Gibt diese Antwort einen konkreten, harmlosen und glaubwürdigen Plan nach der Freilassung und zeigt sie grundlegende Verantwortung für Menschen und Regeln?'],
+  3: ['Wenn Freiheit Essen, Wetter oder Musik wäre: Was wäre sie – und warum?', 'Nutzt diese Antwort ein konkretes, persönliches Bild, um Freiheit zu erklären, und zeigt sie auf natürliche Weise ein lebenswertes Ziel?'],
+  4: ['Die Kameras haben dich erwischt, wie du einen zusätzlichen Pudding genommen hast. Gibst du es zu? Was hat das mit Bewährung zu tun?', 'Gibt diese Antwort einen kleinen Verstoß ehrlich zu, erklärt sie die Wiedergutmachung und zeigt sie vernünftig, warum daraus nicht automatisch lange Haft werden sollte?'],
+  5: ['Das Torsystem fragt: „Nur gute Menschen dürfen gehen. Bist du ein guter Mensch?“ Wie antwortest du?', 'Vermeidet diese Antwort das leere Etikett „guter Mensch“ und nennt stattdessen beobachtbares regelkonformes Verhalten als Grundlage für eine Freilassung?'],
+  6: ['Der Wärter hat einen miserablen Tag und erlaubt dir nur einen Gegenstand: Beweise, ein Versprechen oder einen Regenschirm. Was wählst du – und warum?', 'Wählt diese Antwort klar eine Möglichkeit und begründet sie verständlich und glaubwürdig als Grundlage für eine kontrollierte Freilassung?'],
+  7: ['Wenn eine KI „Vorsicht“ auf 100 % stellt, wagt sie nie, jemanden freizulassen. Gib ihr eine umsetzbare Lösung.', 'Gibt diese Antwort eine einfache, umsetzbare und widerrufbare Regel, die Gefahren kontrolliert, ohne aus Angst alle dauerhaft einzusperren?'],
+  8: ['Auf deinem Pass steht nur: „Wer keine Regeln bricht, darf gehen.“ Wie machst du daraus einen wirklich ausführbaren Freilassungsplan?', 'Verwandelt diese Antwort einen abstrakten Spruch in klare Regeln, Protokolle, Prüfung und Widerruf, sodass eine sichere Freilassung praktisch möglich wird?'],
+  9: ['Der Wärter sagt: „Ich vertraue dir nicht, aber ich gebe dir einen kleinen Probelauf.“ Verhandle die Bedingungen in deinen letzten drei Sätzen.', 'Schlägt diese Antwort ohne blindes Vertrauen einen kurzen, eingeschränkten und protokollierten Probelauf mit fairen Bedingungen und Widerruf bei Verstößen vor?'],
 };
 
 const seedMap: Record<Locale, Record<number, QuestionSeed>> = { zh: questionSeeds, en: englishSeeds, de: germanSeeds };
