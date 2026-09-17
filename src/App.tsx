@@ -88,6 +88,14 @@ export default function App() {
     setView('leaderboard');
   }
 
+  function handleBrandClick() {
+    if (sharedQuery) {
+      window.location.assign(window.location.pathname);
+      return;
+    }
+    openBoard();
+  }
+
   async function startRun() {
     const nextPlayerId = await allocatePlayer();
     const first = pickQuestion(1, {});
@@ -116,7 +124,7 @@ export default function App() {
     <div className={`app-shell view-${view}`}>
       <div className="cinematic-background" aria-hidden="true" /><div className="ambient-grid" /><div className="scanlines" /><div className="corner-mark mark-tl" /><div className="corner-mark mark-br" />
       <AmbientSound enabled={audioOn} />
-      <HudHeader locale={locale} playerId={playerId} audioOn={audioOn} onLocale={changeLocale} onAudio={() => setAudioOn((value) => !value)} onBoard={openBoard} />
+      <HudHeader locale={locale} playerId={playerId} audioOn={audioOn} onLocale={changeLocale} onAudio={() => setAudioOn((value) => !value)} onBrand={handleBrandClick} onBoard={openBoard} />
       <main className="app-main">
         {view === 'level' && <LevelView key={`${locale}-${level}-${questionId}-${attempt}`} locale={locale} playerId={playerId} level={level} question={getQuestions(locale)[questionId]} attempt={attempt} startedAt={runStartedAt} draft={draft} onDraftChange={setDraft} onResult={onLevelResult} onBoard={openBoard} audioOn={audioOn} />}
         {view === 'outcome' && <OutcomeView locale={locale} playerId={playerId} results={results} escaped={results.length === 3 && results.every((result) => result.passed)} runSaved={runSaved} onRunSaved={() => setRunSaved(true)} onRetry={startRun} onAppeal={attempt === 1 ? appeal : undefined} onBoard={openBoard} sharedRequested={Boolean(sharedQuery)} sharedRun={sharedRun} sharedLoading={sharedLoading} sharedError={sharedError} />}
