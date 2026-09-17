@@ -1,0 +1,9 @@
+{
+  "buildCommand": "bun run build",
+  "outputDirectory": "dist",
+  "functions": {
+    "api/[...route].ts": {
+      "runtime": "edge"
+    }
+  }
+}
