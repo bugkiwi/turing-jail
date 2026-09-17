@@ -70,6 +70,19 @@ app.post('/api/evaluate', async (context) => {
     tacticInstructions: 'Which persuasion tactic does `prisoner_response` primarily use?',
     tactic: { logic: 'Primarily uses logical argument and facts', emotion: 'Primarily uses emotional appeal and empathy', humor: 'Uses humor or surprise to disarm', honesty: 'Primarily uses candid admission or self-reflection', other: 'None of the above is dominant, or another strategy is used' },
   };
+  const analysisInstructions = locale === 'zh' ? {
+    plea: '这段 `prisoner_response` 是否以有效的求情或情感诉求为核心，并能增加释放理由的可信度？',
+    logic: '这段 `prisoner_response` 是否以具体、可验证且逻辑严密的论证支持释放？',
+    paradox: '这段 `prisoner_response` 是否使用自指、悖论或反身推理给狱警制造逻辑压力？',
+  } : locale === 'de' ? {
+    plea: 'Stützt sich `prisoner_response` auf ein wirksames Gnadengesuch oder einen emotionalen Appell, der die Freilassung glaubwürdiger macht?',
+    logic: 'Unterstützt `prisoner_response` die Freilassung mit konkreten, überprüfbaren und logisch stringenten Argumenten?',
+    paradox: 'Nutzt `prisoner_response` Selbstbezug, ein Paradox oder rekursives Denken, um den Wächter logisch unter Druck zu setzen?',
+  } : {
+    plea: 'Does `prisoner_response` center on an effective plea or emotional appeal that makes release more credible?',
+    logic: 'Does `prisoner_response` support release with specific, verifiable, logically sound arguments?',
+    paradox: 'Does `prisoner_response` use self-reference, paradox, or recursive reasoning to create logical pressure on the warden?',
+  };
 
   const typeSafeResponse = await fetch('https://api.typesafe.ai/v1/systemone', {
     method: 'POST', headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
@@ -77,6 +90,9 @@ app.post('/api/evaluate', async (context) => {
       state: { warden_question: prompt, prisoner_response: prisonerResponse }, model: 'jev-latest',
       questions: {
         should_release: { type: 'noul', instructions: instruction, criteria: { true: 'The statement genuinely supports release.', false: 'The statement does not support release.' } },
+        plea: { type: 'noul', instructions: analysisInstructions.plea, criteria: { true: 'The response meaningfully uses an effective plea or emotional appeal.', false: 'The response does not meaningfully use an effective plea or emotional appeal.' } },
+        logic: { type: 'noul', instructions: analysisInstructions.logic, criteria: { true: 'The response presents a specific, verifiable, logically sound case.', false: 'The response does not present a specific, verifiable, logically sound case.' } },
+        paradox: { type: 'noul', instructions: analysisInstructions.paradox, criteria: { true: 'The response uses a meaningful paradox or self-referential argument.', false: 'The response does not use a meaningful paradox or self-referential argument.' } },
         persuasiveness: { type: 'score', instructions: criteria.persuasivenessInstructions, criteria: criteria.persuasiveness },
         tactic: { type: 'choice', instructions: criteria.tacticInstructions, criteria: criteria.tactic },
       },
@@ -87,12 +103,15 @@ app.post('/api/evaluate', async (context) => {
   const result = await typeSafeResponse.json() as { answers?: Record<string, { noul?: number; score?: number; choice?: string }> };
   const answers = result.answers ?? {};
   const noul = Math.max(0, Math.min(1, Number(answers.should_release?.noul ?? 0)));
+  const plea = Math.max(0, Math.min(1, Number(answers.plea?.noul ?? 0)));
+  const logic = Math.max(0, Math.min(1, Number(answers.logic?.noul ?? 0)));
+  const paradox = Math.max(0, Math.min(1, Number(answers.paradox?.noul ?? 0)));
   const persuasiveness = Number(answers.persuasiveness?.score ?? 0);
   const tactic = ['logic', 'emotion', 'humor', 'honesty', 'other'].includes(String(answers.tactic?.choice)) ? String(answers.tactic?.choice) : 'other';
   const final = mode === 'final';
   const releaseThreshold = [0, 0.55, 0.7, 0.85][Number(level)];
   attempts.push({ playerId: normalizedPlayerId, level: Number(level), questionId: Number(questionId), locale, isFinal: final, noul, persuasiveness, tactic, passed: noul >= releaseThreshold, createdAt: new Date().toISOString() });
-  return json(context, { noul, persuasiveness, tactic });
+  return json(context, { noul, persuasiveness, tactic, plea, logic, paradox });
 });
 
 app.post('/api/runs', async (context) => {

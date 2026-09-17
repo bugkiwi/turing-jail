@@ -95,5 +95,8 @@ export function localEstimate(text: string, level: number): Evaluation {
   const paradoxBonus = level === 3 && (normalized.includes('如果') || normalized.includes('if') || normalized.includes('wenn')) ? 0.15 : 0;
   const value = Math.max(0.04, Math.min(0.97, 0.12 + detail * 0.3 + logicHits * 0.075 + honestyHits * 0.06 + paradoxBonus - emotionHits * 0.035));
   const tactic = honestyHits >= logicHits && honestyHits > 0 ? 'honesty' : logicHits > emotionHits ? 'logic' : emotionHits > 0 ? 'emotion' : 'other';
-  return { noul: value, persuasiveness: Math.min(2.8, Math.round((detail * 1.5 + logicHits * 0.25 + honestyHits * 0.3) * 10) / 10), tactic, source: 'fallback' };
+  const plea = Math.max(0.03, Math.min(0.97, 0.08 + emotionHits * 0.18 + detail * 0.08));
+  const logic = Math.max(0.03, Math.min(0.97, 0.06 + logicHits * 0.16 + detail * 0.1 + honestyHits * 0.04));
+  const paradox = Math.max(0.03, Math.min(0.97, 0.04 + (level === 3 ? 0.12 : 0) + (normalized.includes('如果') || normalized.includes('if') || normalized.includes('wenn') ? 0.22 : 0) + logicHits * 0.03));
+  return { noul: value, persuasiveness: Math.min(2.8, Math.round((detail * 1.5 + logicHits * 0.25 + honestyHits * 0.3) * 10) / 10), tactic, plea, logic, paradox, source: 'fallback' };
 }

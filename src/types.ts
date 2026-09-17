@@ -14,6 +14,9 @@ export type Evaluation = {
   noul: number;
   persuasiveness: number;
   tactic: Tactic;
+  plea: number;
+  logic: number;
+  paradox: number;
   source?: 'typesafe' | 'fallback';
 };
 
