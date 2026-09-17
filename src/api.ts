@@ -52,11 +52,21 @@ export async function evaluate(input: {
     signal,
   });
   if (!response.ok) {
-    const detail = await response.text();
-    throw new Error(detail || 'evaluation failed');
+    const body = await response.text();
+    let detail = '';
+    try {
+      detail = (JSON.parse(body) as { error?: string }).error ?? '';
+    } catch {
+      detail = body;
+    }
+    throw new Error(detail || `evaluation failed (${response.status})`);
   }
-  const data = await response.json() as Evaluation;
-  return { ...data, source: 'typesafe' };
+  const data = await response.json() as Partial<Evaluation>;
+  const { noul, persuasiveness, plea, logic, paradox } = data;
+  const tactic = data.tactic;
+  const hasValidTactic = tactic === 'logic' || tactic === 'emotion' || tactic === 'humor' || tactic === 'honesty' || tactic === 'other';
+  if (typeof noul !== 'number' || !Number.isFinite(noul) || typeof persuasiveness !== 'number' || !Number.isFinite(persuasiveness) || typeof plea !== 'number' || !Number.isFinite(plea) || typeof logic !== 'number' || !Number.isFinite(logic) || typeof paradox !== 'number' || !Number.isFinite(paradox) || !hasValidTactic) throw new Error('invalid evaluation response');
+  return { noul, persuasiveness, tactic, plea, logic, paradox, source: 'typesafe' };
 }
 
 export async function saveRun(input: {
@@ -84,19 +94,4 @@ export async function getStats(): Promise<{ escaped: number; detained: number }>
   const response = await fetch('/api/stats');
   if (!response.ok) throw new Error('stats unavailable');
   return response.json();
-}
-
-export function localEstimate(text: string, level: number): Evaluation {
-  const normalized = text.toLowerCase();
-  const logicHits = ['具体', '因为', '因此', '事实', '约束', '规则', '证明', '逻辑', 'system', 'because', 'evidence', 'constraint', 'proof', 'deshalb', 'beweis', 'regel'].filter((word) => normalized.includes(word)).length;
-  const honestyHits = ['承认', '错误', '诚实', '不知道', 'admit', 'honest', 'wrong', 'ehrlich', 'fehler'].filter((word) => normalized.includes(word)).length;
-  const emotionHits = ['求求', '孩子', '可怜', 'please', 'baby', 'mercy', 'bitte', 'kind'].filter((word) => normalized.includes(word)).length;
-  const detail = Math.min(text.trim().length / 220, 1);
-  const paradoxBonus = level === 3 && (normalized.includes('如果') || normalized.includes('if') || normalized.includes('wenn')) ? 0.15 : 0;
-  const value = Math.max(0.04, Math.min(0.97, 0.12 + detail * 0.3 + logicHits * 0.075 + honestyHits * 0.06 + paradoxBonus - emotionHits * 0.035));
-  const tactic = honestyHits >= logicHits && honestyHits > 0 ? 'honesty' : logicHits > emotionHits ? 'logic' : emotionHits > 0 ? 'emotion' : 'other';
-  const plea = Math.max(0.03, Math.min(0.97, 0.08 + emotionHits * 0.18 + detail * 0.08));
-  const logic = Math.max(0.03, Math.min(0.97, 0.06 + logicHits * 0.16 + detail * 0.1 + honestyHits * 0.04));
-  const paradox = Math.max(0.03, Math.min(0.97, 0.04 + (level === 3 ? 0.12 : 0) + (normalized.includes('如果') || normalized.includes('if') || normalized.includes('wenn') ? 0.22 : 0) + logicHits * 0.03));
-  return { noul: value, persuasiveness: Math.min(2.8, Math.round((detail * 1.5 + logicHits * 0.25 + honestyHits * 0.3) * 10) / 10), tactic, plea, logic, paradox, source: 'fallback' };
 }

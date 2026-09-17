@@ -17,7 +17,7 @@ export type Evaluation = {
   plea: number;
   logic: number;
   paradox: number;
-  source?: 'typesafe' | 'fallback';
+  source?: 'typesafe';
 };
 
 export type LevelResult = Evaluation & {

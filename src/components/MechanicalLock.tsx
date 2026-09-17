@@ -1,7 +1,7 @@
 import type { Locale } from '../types';
 import { copy, feedbackFor } from '../content';
 
-type Props = { probability: number; threshold: number; locale: Locale; evaluating?: boolean };
+type Props = { probability: number | null; threshold: number; locale: Locale; evaluating?: boolean; evaluationError?: boolean };
 
 function LockGlyph({ open }: { open: boolean }) {
   return (
@@ -14,15 +14,17 @@ function LockGlyph({ open }: { open: boolean }) {
   );
 }
 
-export function MechanicalLock({ probability, threshold, locale, evaluating = false }: Props) {
+export function MechanicalLock({ probability, threshold, locale, evaluating = false, evaluationError = false }: Props) {
   const t = copy[locale];
-  const verdict = feedbackFor(locale, probability);
-  const unlocked = probability >= threshold;
-  const state = unlocked ? 'released' : probability >= 0.35 ? 'wavering' : 'locked';
-  const progress = 816.81 * (1 - probability);
+  const hasProbability = probability !== null;
+  const value = probability ?? 0;
+  const verdict = hasProbability ? feedbackFor(locale, value) : null;
+  const unlocked = hasProbability && value >= threshold;
+  const state = !hasProbability ? (evaluationError ? 'unavailable' : 'waiting') : unlocked ? 'released' : value >= 0.35 ? 'wavering' : 'locked';
+  const progress = 816.81 * (1 - value);
 
   return (
-    <div className={`stitch-lock-assembly state-${state} ${evaluating ? 'is-evaluating' : ''}`} aria-label={`${t.feedback}: ${(probability * 100).toFixed(0)}%`}>
+    <div className={`stitch-lock-assembly state-${state} ${evaluating ? 'is-evaluating' : ''}`} aria-label={`${t.feedback}: ${hasProbability ? `${(value * 100).toFixed(0)}%` : evaluationError ? t.evaluationUnavailableShort : '—.—'}`}>
       <div className="stitch-steam steam-left" />
       <div className="stitch-steam steam-right" />
       <div className="stitch-bolt stitch-bolt-left"><div className="stitch-bolt-lights"><i /><i /><i /></div><div><span>{locale === 'zh' ? '液压死栓·左' : locale === 'de' ? 'HYDRAULIKBOLZEN · L' : 'HYDRAULIC BOLT · L'}</span><b>{unlocked ? (locale === 'zh' ? '[完全解脱]' : '[RETRACTED]') : (locale === 'zh' ? '[深度咬合]' : '[ENGAGED]')}</b></div></div>
@@ -40,10 +42,10 @@ export function MechanicalLock({ probability, threshold, locale, evaluating = fa
       <div className="stitch-lock-core">
         <div className="stitch-core-label"><span /> <strong>{locale === 'zh' ? 'L-01 液压隔断闸栓' : locale === 'de' ? 'L-01 HYDRAULISCHE SPERRE' : 'L-01 HYDRAULIC BULKHEAD'}</strong></div>
         <LockGlyph open={unlocked} />
-        <div className="stitch-probability">{probability.toFixed(2)}<span>/ 1.00</span></div>
-        <div className="stitch-status-badge">{unlocked ? (probability >= 0.85 ? (locale === 'zh' ? '【安全解锁】机械锁销已弹出' : '[SECURE UNLOCK] BOLTS RETRACTED') : t.released) : state === 'wavering' ? t.wavering : t.locked}</div>
+        <div className="stitch-probability">{hasProbability ? value.toFixed(2) : '—.—'}<span>/ 1.00</span></div>
+        {(hasProbability || evaluationError) && <div className="stitch-status-badge">{evaluationError ? t.evaluationUnavailableShort : unlocked ? (value >= 0.85 ? (locale === 'zh' ? '【安全解锁】机械锁销已弹出' : '[SECURE UNLOCK] BOLTS RETRACTED') : t.released) : state === 'wavering' ? t.wavering : t.locked}</div>}
         <div className="stitch-threshold">{t.threshold}: <b>≥ {threshold.toFixed(2)}</b></div>
-        <div className="stitch-core-readout">{evaluating ? t.evaluating : verdict.title}</div>
+        <div className="stitch-core-readout">{evaluating ? t.evaluating : evaluationError ? t.evaluationUnavailableShort : verdict?.title ?? ''}</div>
       </div>
     </div>
   );
