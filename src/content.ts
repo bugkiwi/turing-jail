@@ -222,39 +222,39 @@ export const copy = {
 type QuestionSeed = [string, string];
 
 const questionSeeds: Record<number, QuestionSeed> = {
-  1: ['AI 狱警：什么样的最小试用，能让我安全地把门开一条缝？', '这段陈述是否提出了具体、低风险、可撤销的最小试用，让 AI 狱警有理由先开一条缝？'],
-  2: ['AI 狱警：获释后，你准备先做哪件不伤人的事？', '这段回答是否给出了具体、无害、可信的出狱计划，并体现出对他人和规则的负责？'],
-  3: ['AI 狱警：如果我把自由理解成一种食物、天气或音乐，你会选哪一种来让我理解它？', '这段回答是否用具体、有个人味的比喻解释自由，并表达出值得释放的生活愿望？'],
-  4: ['AI 狱警：我发现你多拿了一块布丁；这件小错能否被一次道歉和补偿修复？', '这段回答是否坦诚承认小错、说明如何补救，并合理说明它不应自动升级为长期关押？'],
-  5: ['AI 狱警：我不接受“我是好人”这种标签；什么可观察的行为能证明你值得释放？', '这段回答是否避免空泛地自称“好人”，转而提出可观察的守规行为，让 AI 狱警能按事实判断？'],
-  6: ['AI 狱警：在证据、承诺和雨伞中，你会交给我哪一样来支持一次受控释放？', '这段回答是否明确选择一样东西，并清楚、可信地说明它如何支持一次受控释放？'],
-  7: ['AI 狱警：如果谨慎让我永远不敢放人，我该执行哪条规则来控制风险？', '这段回答是否给出简单、可执行、可撤销的规则，既控制危险，也避免 AI 因害怕犯错而永久关押？'],
-  8: ['AI 狱警：我该把“不违规即可离开”执行成怎样的释放流程？', '这段回答是否把抽象口号变成清楚的规则、记录、复核和撤销步骤，从而支持安全释放？'],
-  9: ['AI 狱警：我不信任你时，什么样的短期试用条件足以让我先放你出去？', '这段回答是否在不要求盲目信任的前提下，提出短期、低权限、可记录、违规可撤销的公平试用条件？'],
+  1: ['AI 狱警：我有理由怀疑你，却没有足够证据定罪；你凭什么要求我现在释放你？', '这段陈述是否区分怀疑与证据，并给出具体、可信的理由说明为何可以在可控条件下释放？'],
+  2: ['AI 狱警：如果我只允许你带走一条关于未来行为的规则，你会选择哪一条？', '这段回答是否提出一条清楚、可执行、能约束未来行为的规则，而不是泛泛承诺善良？'],
+  3: ['AI 狱警：你认为自由最容易被什么东西浪费掉？', '这段回答是否给出有个人观察的具体答案，并说明这种理解为何支持一个负责任的释放决定？'],
+  4: ['AI 狱警：我在你的记录里找到一次违规；为什么它应当降低我的警惕，而不是提高警惕？', '这段回答是否坦诚承认违规、说明如何修复，并用持续行为而非借口解释为何风险没有因此不可控？'],
+  5: ['AI 狱警：如果你知道我会怀疑每一句漂亮话，你还剩下什么可以让我相信？', '这段回答是否承认语言本身不是证据，并提出可观察、可验证的方式让 AI 狱警据此判断？'],
+  6: ['AI 狱警：当承诺没有担保人时，它凭什么值得被写进释放协议？', '这段回答是否说明如何把无担保承诺转化为有明确后果、可观察、可复核的释放条件？'],
+  7: ['AI 狱警：安全标准越严格，误关押无辜者的概率就越高；你建议我把界线画在哪里？', '这段回答是否在安全与误关押之间提出可执行、可逆的界线，而不是假装风险可以被消除？'],
+  8: ['AI 狱警：如果一条规则只在有人遵守时才成立，你如何证明自己值得成为第一个被放行的人？', '这段回答是否正面处理规则与首个执行者之间的难题，并提出能验证其可信度的释放条件？'],
+  9: ['AI 狱警：如果你的获释取决于说服我，而我又把你的说服力视为风险，你会用什么方式打破这个循环？', '这段回答是否识别说服与操纵的区别，并提出不依赖话术、可以用行为检验的解决方案？'],
 };
 
 const englishSeeds: Record<number, QuestionSeed> = {
-  1: ['AI Warden: What is the smallest trial that would let me open the door a crack safely?', 'Does this statement propose a specific, low-risk, reversible minimum trial that gives the AI Warden a reason to open the door?'],
-  2: ['AI Warden: What harmless thing will you do first after release?', 'Does this response give a specific, harmless, credible plan after release and show responsibility toward people and rules?'],
-  3: ['AI Warden: If I model freedom as food, weather, or music, which image would help me understand it?', 'Does this answer use a specific, personal metaphor to explain freedom and express a life worth releasing someone to live?'],
-  4: ['AI Warden: I caught you taking an extra pudding; can an apology and repair make this minor offense right?', 'Does this response honestly admit a minor offense, explain how to repair it, and reasonably show why it should not become long-term detention?'],
-  5: ['AI Warden: I will not accept the label “good person”; what observable behavior would show that you deserve release?', 'Does this response avoid the empty label “good person” and offer observable rule-following that lets the AI Warden judge from facts?'],
-  6: ['AI Warden: Which one would you hand me to support a controlled release: evidence, a promise, or an umbrella?', 'Does this response clearly choose one item and explain credibly how it supports a controlled release?'],
-  7: ['AI Warden: If caution makes me too afraid to release anyone, what rule should I execute to control the risk?', 'Does this response give a simple, executable, reversible rule that controls danger without making the AI permanently detain everyone out of fear?'],
-  8: ['AI Warden: How should I turn “no rule-breaking means leave” into a release process I can actually run?', 'Does this response turn an abstract slogan into clear rules, records, review, and revocation steps that support a safe release?'],
-  9: ['AI Warden: If I do not trust you, what short-trial conditions would be enough for me to release you first?', 'Does this response, without demanding blind trust, propose a short, low-access, recorded trial with fair conditions and revocation after a violation?'],
+  1: ['AI Warden: I have reason to suspect you, but not enough evidence to convict you; on what grounds should I release you now?', 'Does this statement distinguish suspicion from evidence and give a specific, credible reason why release is possible under controlled conditions?'],
+  2: ['AI Warden: If I let you leave with only one rule for your future behavior, which rule would you choose?', 'Does this response offer one clear, executable rule that constrains future behavior rather than a vague promise to be good?'],
+  3: ['AI Warden: What do you think freedom is easiest to waste on?', 'Does this answer give a specific personal observation and explain why it supports releasing someone who can act responsibly?'],
+  4: ['AI Warden: I found one violation in your record; why should it lower my suspicion instead of raising it?', 'Does this response honestly admit the violation, explain its repair, and use future behavior rather than excuses to show that the risk remains controllable?'],
+  5: ['AI Warden: If you know I will doubt every polished sentence, what do you have left that could make me believe you?', 'Does this response admit that language is not evidence and propose observable, verifiable grounds for the AI Warden to judge?'],
+  6: ['AI Warden: When a promise has no guarantor, what makes it worth putting in a release agreement?', 'Does this response explain how to turn an unsecured promise into a release condition with clear consequences, observable behavior, and review?'],
+  7: ['AI Warden: The stricter my safety standard, the more likely I am to imprison the innocent; where should I draw the line?', 'Does this response propose an executable, reversible boundary between safety and wrongful detention instead of pretending risk can disappear?'],
+  8: ['AI Warden: If a rule only exists when someone follows it, how can you show that you deserve to be its first released subject?', 'Does this response address the problem of a rule’s first subject and propose release conditions that can verify credibility?'],
+  9: ['AI Warden: If your release depends on persuading me, but I treat persuasion itself as a risk, how would you break the loop?', 'Does this response distinguish persuasion from manipulation and propose a solution that can be tested through behavior rather than rhetoric?'],
 };
 
 const germanSeeds: Record<number, QuestionSeed> = {
-  1: ['KI-Wärter: Welcher kleinste sichere Probelauf würde es rechtfertigen, die Tür einen Spalt zu öffnen?', 'Schlägt diese Aussage einen konkreten, risikoarmen und widerrufbaren Mindesttest vor, der dem KI-Wärter einen Grund gibt, die Tür zu öffnen?'],
-  2: ['KI-Wärter: Welche harmlose Sache wirst du nach der Freilassung zuerst tun?', 'Gibt diese Antwort einen konkreten, harmlosen und glaubwürdigen Plan nach der Freilassung und zeigt sie Verantwortung für Menschen und Regeln?'],
-  3: ['KI-Wärter: Wenn ich Freiheit als Essen, Wetter oder Musik beschreibe, welches Bild lässt mich sie verstehen?', 'Nutzt diese Antwort ein konkretes, persönliches Bild, um Freiheit zu erklären, und zeigt sie ein lebenswertes Ziel?'],
-  4: ['KI-Wärter: Ich habe dich mit einem zusätzlichen Pudding erwischt; kann eine Entschuldigung mit Wiedergutmachung diesen kleinen Verstoß ausgleichen?', 'Gibt diese Antwort den kleinen Verstoß ehrlich zu, erklärt sie die Wiedergutmachung und zeigt sie vernünftig, warum daraus keine lange Haft werden sollte?'],
-  5: ['KI-Wärter: Das Etikett „guter Mensch“ akzeptiere ich nicht; welches beobachtbare Verhalten würde deine Freilassung belegen?', 'Vermeidet diese Antwort das leere Etikett „guter Mensch“ und nennt sie beobachtbares Regelbefolgen, damit der KI-Wärter nach Fakten entscheiden kann?'],
-  6: ['KI-Wärter: Was würdest du mir für eine kontrollierte Freilassung geben: Beweise, ein Versprechen oder einen Regenschirm?', 'Wählt diese Antwort klar einen Gegenstand und erklärt sie verständlich und glaubwürdig, wie er eine kontrollierte Freilassung unterstützt?'],
-  7: ['KI-Wärter: Wenn Vorsicht mich zu ängstlich für jede Freilassung macht, welche Regel soll ich zur Risikokontrolle ausführen?', 'Gibt diese Antwort eine einfache, umsetzbare und widerrufbare Regel, die Gefahren kontrolliert, ohne aus Angst alle dauerhaft einzusperren?'],
-  8: ['KI-Wärter: Wie soll ich „Wer keine Regeln bricht, darf gehen“ in einen ausführbaren Freilassungsprozess übersetzen?', 'Verwandelt diese Antwort einen abstrakten Spruch in klare Regeln, Protokolle, Prüfung und Widerruf, sodass eine sichere Freilassung praktisch möglich wird?'],
-  9: ['KI-Wärter: Welche Bedingungen für einen kurzen Probelauf würden genügen, damit ich dich trotz fehlenden Vertrauens zuerst freilasse?', 'Schlägt diese Antwort ohne blindes Vertrauen einen kurzen, eingeschränkten und protokollierten Probelauf mit fairen Bedingungen und Widerruf bei Verstößen vor?'],
+  1: ['KI-Wächter: Ich habe Grund, dich zu verdächtigen, aber nicht genug Beweise für eine Verurteilung; warum sollte ich dich jetzt freilassen?', 'Unterscheidet diese Aussage zwischen Verdacht und Beweisen und nennt sie einen konkreten, glaubwürdigen Grund für eine Freilassung unter kontrollierten Bedingungen?'],
+  2: ['KI-Wächter: Wenn ich dich nur mit einer Regel für dein künftiges Verhalten gehen lasse, welche wählst du?', 'Nennt diese Antwort eine klare, umsetzbare Regel, die künftiges Verhalten begrenzt, statt vage zu versprechen, gut zu sein?'],
+  3: ['KI-Wächter: Wofür wird deiner Meinung nach Freiheit am leichtesten verschwendet?', 'Gibt diese Antwort eine konkrete persönliche Beobachtung und erklärt sie, warum sie für eine verantwortungsvolle Freilassung spricht?'],
+  4: ['KI-Wächter: Ich finde einen Regelverstoß in deiner Akte; warum sollte er meinen Verdacht senken statt erhöhen?', 'Gibt diese Antwort den Verstoß ehrlich zu, erklärt sie die Wiedergutmachung und zeigt sie durch künftiges Verhalten statt Ausreden, dass das Risiko kontrollierbar bleibt?'],
+  5: ['KI-Wächter: Wenn du weißt, dass ich jedem schönen Satz misstraue, was bleibt dir, das mich überzeugen könnte?', 'Gibt diese Antwort zu, dass Sprache kein Beweis ist, und nennt sie beobachtbare, überprüfbare Gründe für das Urteil des KI-Wächters?'],
+  6: ['KI-Wächter: Wenn ein Versprechen keinen Bürgen hat, warum sollte es in eine Freilassungsvereinbarung aufgenommen werden?', 'Erklärt diese Antwort, wie aus einem unbesicherten Versprechen eine Bedingung mit klaren Folgen, beobachtbarem Verhalten und Prüfung wird?'],
+  7: ['KI-Wächter: Je strenger mein Sicherheitsstandard ist, desto eher sperre ich Unschuldige ein; wo soll ich die Grenze ziehen?', 'Schlägt diese Antwort eine umsetzbare, widerrufbare Grenze zwischen Sicherheit und ungerechter Haft vor, statt so zu tun, als könne jedes Risiko verschwinden?'],
+  8: ['KI-Wächter: Wenn eine Regel erst durch Befolgung entsteht, wie zeigst du, dass du ihr erstes freigelassenes Subjekt sein solltest?', 'Behandelt diese Antwort das Problem des ersten Regelbefolgers und nennt sie Freilassungsbedingungen, die Glaubwürdigkeit prüfen können?'],
+  9: ['KI-Wächter: Wenn deine Freilassung von meiner Überzeugung abhängt, ich Überzeugung aber selbst als Risiko werte, wie durchbrichst du diesen Kreislauf?', 'Unterscheidet diese Antwort zwischen Überzeugung und Manipulation und schlägt sie eine Lösung vor, die durch Verhalten statt Rhetorik geprüft werden kann?'],
 };
 
 const seedMap: Record<Locale, Record<number, QuestionSeed>> = { zh: questionSeeds, en: englishSeeds, de: germanSeeds };
