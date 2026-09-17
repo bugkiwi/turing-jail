@@ -11,6 +11,7 @@ const players = new Set<string>();
 const attempts: Attempt[] = [];
 const runs: Run[] = [];
 const rateBuckets = new Map<string, number[]>();
+let nextPlayerNumber = 0;
 
 function env(name: string) {
   const runtime = globalThis as unknown as { Bun?: { env?: Record<string, string | undefined> }; process?: { env?: Record<string, string | undefined> } };
@@ -19,10 +20,10 @@ function env(name: string) {
 
 const seedRuns: Run[] = [
   ['482913', 'zh', .94, .89, .88, true], ['715204', 'zh', .9, .82, .76, false], ['304118', 'zh', .83, .78, .73, false], ['651902', 'zh', .8, .72, .68, false],
-  ['910422', 'en', .96, .91, .87, true], ['184220', 'en', .92, .84, .79, false], ['730115', 'en', .87, .8, .74, false], ['502911', 'en', .81, .74, .7, false],
+  ['ABCDEF', 'en', .97, .93, .9, true], ['910422', 'en', .96, .91, .87, true], ['184220', 'en', .92, .84, .79, false], ['730115', 'en', .87, .8, .74, false], ['502911', 'en', .81, .74, .7, false],
   ['662018', 'de', .95, .88, .86, true], ['231509', 'de', .91, .83, .77, false], ['440821', 'de', .86, .78, .73, false], ['801302', 'de', .8, .73, .69, false],
 ].map(([playerId, locale, level1, level2, level3, escaped]) => ({ playerId: String(playerId), locale: locale as Locale, level1: Number(level1), level2: Number(level2), level3: Number(level3), escaped: Boolean(escaped), avgProb: (Number(level1) + Number(level2) + Number(level3)) / 3, createdAt: new Date().toISOString() }));
-seedRuns.forEach((run) => { runs.push(run); players.add(run.playerId); });
+seedRuns.forEach((run) => { runs.push(run); });
 
 const json = (context: Context, body: unknown, status = 200) => context.json(body, status as 200);
 
@@ -36,8 +37,9 @@ function rateLimit(context: Context, key: string, max: number, windowMs: number)
 }
 
 function newPlayerId() {
-  for (let attempt = 0; attempt < 20; attempt += 1) {
-    const id = String(Math.floor(100000 + Math.random() * 900000));
+  for (let attempt = 0; attempt < 0x1000000; attempt += 1) {
+    const id = nextPlayerNumber.toString(16).padStart(6, '0').toUpperCase();
+    nextPlayerNumber = (nextPlayerNumber + 1) % 0x1000000;
     if (!players.has(id)) return id;
   }
   throw new Error('player pool exhausted');
@@ -64,9 +66,10 @@ app.post('/api/evaluate', async (context) => {
   const prisonerResponse = typeof body?.response === 'string' ? body.response.trim() : '';
   const instruction = typeof body?.instruction === 'string' ? body.instruction.trim() : '';
   const prompt = typeof body?.prompt === 'string' ? body.prompt.trim() : '';
-  if (typeof playerId !== 'string' || !/^\d{6}$/.test(playerId) || !isLocale(locale) || (mode !== 'realtime' && mode !== 'final') || !Number.isInteger(level) || Number(level) < 1 || Number(level) > 3 || !Number.isInteger(questionId) || prisonerResponse.length === 0 || prisonerResponse.length > 1500 || !instruction || !prompt) return json(context, { error: 'Invalid evaluation payload.' }, 422);
+  if (typeof playerId !== 'string' || !/^[0-9A-F]{6}$/i.test(playerId) || !isLocale(locale) || (mode !== 'realtime' && mode !== 'final') || !Number.isInteger(level) || Number(level) < 1 || Number(level) > 3 || !Number.isInteger(questionId) || prisonerResponse.length === 0 || prisonerResponse.length > 1500 || !instruction || !prompt) return json(context, { error: 'Invalid evaluation payload.' }, 422);
+  const normalizedPlayerId = playerId.toUpperCase();
   const ip = context.req.header('x-forwarded-for') ?? 'local';
-  if (!rateLimit(context, `eval:${playerId}:${ip}`, 30, 60 * 60 * 1000)) return json(context, { error: 'Evaluation limit reached.' }, 429);
+  if (!rateLimit(context, `eval:${normalizedPlayerId}:${ip}`, 30, 60 * 60 * 1000)) return json(context, { error: 'Evaluation limit reached.' }, 429);
   const apiKey = env('TYPESAFE_API_KEY');
   if (!apiKey) return json(context, { error: 'TypeSafe API key is not configured.' }, 503);
 
@@ -107,17 +110,18 @@ app.post('/api/evaluate', async (context) => {
   const tactic = ['logic', 'emotion', 'humor', 'honesty', 'other'].includes(String(answers.tactic?.choice)) ? String(answers.tactic?.choice) : 'other';
   const final = mode === 'final';
   const releaseThreshold = [0, 0.55, 0.7, 0.85][Number(level)];
-  attempts.push({ playerId, level: Number(level), questionId: Number(questionId), locale, isFinal: final, noul, persuasiveness, tactic, passed: noul >= releaseThreshold, createdAt: new Date().toISOString() });
+  attempts.push({ playerId: normalizedPlayerId, level: Number(level), questionId: Number(questionId), locale, isFinal: final, noul, persuasiveness, tactic, passed: noul >= releaseThreshold, createdAt: new Date().toISOString() });
   return json(context, { noul, persuasiveness, tactic });
 });
 
 app.post('/api/runs', async (context) => {
   const body = await context.req.json().catch(() => null) as { playerId?: unknown; locale?: unknown; escaped?: unknown; results?: Array<Record<string, unknown>> } | null;
-  if (typeof body?.playerId !== 'string' || !/^\d{6}$/.test(body.playerId) || !isLocale(body.locale) || !Array.isArray(body.results) || body.results.length !== 3 || typeof body.escaped !== 'boolean') return json(context, { error: 'A complete three-level run is required.' }, 422);
+  if (typeof body?.playerId !== 'string' || !/^[0-9A-F]{6}$/i.test(body.playerId) || !isLocale(body.locale) || !Array.isArray(body.results) || body.results.length !== 3 || typeof body.escaped !== 'boolean') return json(context, { error: 'A complete three-level run is required.' }, 422);
   const values = body.results.map((result) => Number(result.noul));
   if (values.some((value) => !Number.isFinite(value) || value < 0 || value > 1)) return json(context, { error: 'Invalid probability.' }, 422);
-  const run: Run = { playerId: body.playerId, locale: body.locale, level1: values[0], level2: values[1], level3: values[2], escaped: body.escaped, avgProb: values.reduce((sum, value) => sum + value, 0) / 3, createdAt: new Date().toISOString() };
-  runs.push(run); players.add(body.playerId); return json(context, { ok: true, run });
+  const normalizedPlayerId = body.playerId.toUpperCase();
+  const run: Run = { playerId: normalizedPlayerId, locale: body.locale, level1: values[0], level2: values[1], level3: values[2], escaped: body.escaped, avgProb: values.reduce((sum, value) => sum + value, 0) / 3, createdAt: new Date().toISOString() };
+  runs.push(run); players.add(normalizedPlayerId); return json(context, { ok: true, run });
 });
 
 app.get('/api/leaderboard', (context) => {
@@ -139,7 +143,7 @@ app.get('/api/players/:id/share', (context) => {
   return json(context, { playerId, locale, avgProb: best.avgProb, escaped: best.escaped, rank: ordered.findIndex((run) => run.playerId === playerId) + 1, probabilities: [best.level1, best.level2, best.level3] });
 });
 
-export default app;
+export { app };
 
 if (import.meta.main) {
   const port = Number(env('PORT') ?? 8787);

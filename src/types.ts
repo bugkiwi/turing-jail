@@ -1,5 +1,5 @@
 export type Locale = 'zh' | 'en' | 'de';
-export type View = 'intro' | 'level' | 'outcome' | 'leaderboard';
+export type View = 'level' | 'outcome' | 'leaderboard';
 export type EvaluationPhase = 'idle' | 'evaluating' | 'feedback' | 'submitted';
 export type Tactic = 'logic' | 'emotion' | 'humor' | 'honesty' | 'other';
 

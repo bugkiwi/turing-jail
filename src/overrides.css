@@ -1,0 +1,8 @@
+.level-tools { display: flex; align-items: center; gap: 16px; }
+.level-board-link { padding: 8px 10px; border: 1px solid rgba(18, 217, 238, .33); color: var(--cyan); background: rgba(12, 25, 34, .7); font: 10px var(--mono); letter-spacing: .06em; }
+.level-board-link:hover { border-color: var(--cyan); background: rgba(18, 217, 238, .1); }
+
+@media (max-width: 600px) {
+  .level-tools { margin-left: auto; gap: 8px; }
+  .level-board-link { padding: 7px 6px; }
+}

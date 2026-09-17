@@ -125,13 +125,13 @@
 
 ### 4.1 设计原则
 
-无需登录、无账号密码，用一个 6 位数字 ID 作为设备级身份标识，专门为排行榜和分享卡服务。
+无需登录、无账号密码，用一个 6 位十六进制 ID 作为设备级身份标识，专门为排行榜和分享卡服务（从 `#000000` 开始递增，支持 `#ABCDEF` 形式）。
 
 ### 4.2 发放流程
 
 1. 用户首次打开页面，前端检查 `localStorage.turingjail_id`
 2. 若不存在，前端调用 `POST /api/players` 向服务端申请一个新 ID
-3. 服务端在数据库里生成一个 6 位数字（`100000`–`999999`），查重直到不冲突，写入 `players` 表，返回给前端
+3. 服务端在数据库里生成一个 6 位十六进制序号（从 `000000` 开始递增，最大为 `FFFFFF`），查重直到不冲突，写入 `players` 表，返回给前端
 4. 前端把 ID 存入 `localStorage`（与当前选择的界面语言一起存储，语言设计见第 11 节），此后所有请求都携带该 ID
 5. 若用户清除浏览器数据，视为全新玩家，会拿到一个新 ID（不做跨设备找回，MVP 阶段不引入登录）
 
@@ -283,7 +283,7 @@ POST https://api.typesafe.ai/v1/systemone
 
 ```
 players
-  id                 varchar(6)  primary key   -- 6位数字ID
+  id                 varchar(6)  primary key   -- 6位十六进制ID
   preferred_locale   varchar(2)               -- 最近一次使用的语言：zh / en / de
   created_at         timestamp
 

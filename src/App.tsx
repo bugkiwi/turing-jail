@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import type { LevelResult, Locale, View } from './types';
-import { copy, getQuestions, levelQuestionIds } from './content';
-import { ensurePlayer, getStats, saveLocale } from './api';
+import { getQuestions, levelQuestionIds } from './content';
+import { ensurePlayer, saveLocale } from './api';
 import { HudHeader } from './components/HudHeader';
-import { IntroView } from './components/IntroView';
 import { LevelView } from './components/LevelView';
 import { OutcomeView } from './components/OutcomeView';
 import { LeaderboardView } from './components/LeaderboardView';
@@ -20,25 +19,37 @@ export default function App() {
     return navigator.language.toLowerCase().startsWith('zh') ? 'zh' : navigator.language.toLowerCase().startsWith('de') ? 'de' : 'en';
   });
   const [playerId, setPlayerId] = useState('------');
-  const [view, setView] = useState<View>('intro');
+  const [view, setView] = useState<View>('level');
+  const [boardReturn, setBoardReturn] = useState<View>('level');
   const [level, setLevel] = useState<1 | 2 | 3>(1);
   const [attempt, setAttempt] = useState(1);
-  const [questionId, setQuestionId] = useState(1);
+  const [questionId, setQuestionId] = useState(() => pickQuestion(1, {}));
   const [usedQuestions, setUsedQuestions] = useState<Record<number, number[]>>({});
   const [results, setResults] = useState<LevelResult[]>([]);
-  const [stats, setStats] = useState({ escaped: 128, detained: 947 });
   const [runStartedAt, setRunStartedAt] = useState(Date.now());
   const [audioOn, setAudioOn] = useState(true);
 
   useEffect(() => {
     ensurePlayer().then(setPlayerId);
-    getStats().then(setStats).catch(() => undefined);
   }, []);
 
+  useEffect(() => {
+    const language = locale === 'zh' ? 'zh-CN' : locale;
+    document.documentElement.lang = language;
+    document.title = locale === 'zh' ? 'Turing Jail // TypeSafe Jev AI 裁决终端' : locale === 'de' ? 'Turing Jail // TypeSafe Jev KI-Urteil' : 'Turing Jail // TypeSafe Jev AI Verdict';
+    const description = document.querySelector('meta[name="description"]');
+    description?.setAttribute('content', locale === 'zh' ? 'Turing Jail 是一场由 TypeSafe Jev System One 裁决的 AI 审讯游戏。写下你的陈述，突破三道机械闸门，争取释放。' : locale === 'de' ? 'Turing Jail ist ein KI-Verhörspiel, bewertet von TypeSafe Jev System One. Schreibe deine Aussage und kämpfe um deine Freilassung.' : 'Turing Jail is a three-level AI interrogation game judged by TypeSafe Jev System One. Write your statement and fight for release.');
+  }, [locale]);
+
   function changeLocale(next: Locale) {
-    if (view === 'level') return;
+    if (view === 'level' && results.length > 0) return;
     setLocale(next);
     saveLocale(next);
+  }
+
+  function openBoard() {
+    setBoardReturn(view === 'leaderboard' ? 'level' : view);
+    setView('leaderboard');
   }
 
   function startRun() {
@@ -65,13 +76,12 @@ export default function App() {
 
   return (
     <div className={`app-shell view-${view}`}>
-      <div className="ambient-grid" /><div className="scanlines" /><div className="corner-mark mark-tl" /><div className="corner-mark mark-br" />
-      <HudHeader locale={locale} playerId={playerId} audioOn={audioOn} onLocale={changeLocale} onAudio={() => setAudioOn((value) => !value)} onBoard={() => setView('leaderboard')} />
+      <div className="cinematic-background" aria-hidden="true" /><div className="ambient-grid" /><div className="scanlines" /><div className="corner-mark mark-tl" /><div className="corner-mark mark-br" />
+      <HudHeader locale={locale} playerId={playerId} audioOn={audioOn} onLocale={changeLocale} onAudio={() => setAudioOn((value) => !value)} onBoard={openBoard} />
       <main className="app-main">
-        {view === 'intro' && <IntroView locale={locale} stats={stats} onStart={startRun} onBoard={() => setView('leaderboard')} />}
-        {view === 'level' && <LevelView key={`${level}-${questionId}-${attempt}`} locale={locale} playerId={playerId} level={level} question={getQuestions(locale)[questionId]} attempt={attempt} startedAt={runStartedAt} onResult={onLevelResult} audioOn={audioOn} />}
-        {view === 'outcome' && <OutcomeView locale={locale} playerId={playerId} results={results} escaped={results.length === 3 && results.every((result) => result.passed)} onRetry={startRun} onAppeal={attempt === 1 ? appeal : undefined} onBoard={() => setView('leaderboard')} />}
-        {view === 'leaderboard' && <LeaderboardView locale={locale} playerId={playerId} onLocale={changeLocale} onBack={() => setView('intro')} />}
+        {view === 'level' && <LevelView key={`${locale}-${level}-${questionId}-${attempt}`} locale={locale} playerId={playerId} level={level} question={getQuestions(locale)[questionId]} attempt={attempt} startedAt={runStartedAt} onResult={onLevelResult} onBoard={openBoard} audioOn={audioOn} />}
+        {view === 'outcome' && <OutcomeView locale={locale} playerId={playerId} results={results} escaped={results.length === 3 && results.every((result) => result.passed)} onRetry={startRun} onAppeal={attempt === 1 ? appeal : undefined} onBoard={openBoard} />}
+        {view === 'leaderboard' && <LeaderboardView locale={locale} playerId={playerId} onLocale={changeLocale} onBack={() => setView(boardReturn)} />}
       </main>
       <footer className="global-footer"><span>© TURING JAIL / 2026</span><span>NO TEXT GENERATION · STRUCTURED VERDICT ONLY</span><span>EDGE PROXY / NEON ARCHIVE</span></footer>
     </div>

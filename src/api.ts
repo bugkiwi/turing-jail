@@ -15,18 +15,19 @@ export function saveLocale(locale: Locale) {
 }
 
 function randomId() {
-  return String(Math.floor(100000 + Math.random() * 900000));
+  return '000000';
 }
 
 export async function ensurePlayer(): Promise<string> {
   const saved = window.localStorage.getItem(PLAYER_KEY);
-  if (saved && /^\d{6}$/.test(saved)) return saved;
+  if (saved && /^[0-9A-F]{6}$/i.test(saved)) return saved.toUpperCase();
   try {
     const response = await fetch('/api/players', { method: 'POST' });
     if (!response.ok) throw new Error('player allocation failed');
     const data = await response.json() as { id: string };
-    window.localStorage.setItem(PLAYER_KEY, data.id);
-    return data.id;
+    const normalized = data.id.toUpperCase();
+    window.localStorage.setItem(PLAYER_KEY, normalized);
+    return normalized;
   } catch {
     const fallback = randomId();
     window.localStorage.setItem(PLAYER_KEY, fallback);
