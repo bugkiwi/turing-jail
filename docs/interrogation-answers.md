@@ -6,15 +6,15 @@
 
 **中文**
 
-因为你手里是怀疑，不是定罪证据。释放可以设边界、留日志、保留撤销权；如果我连这种低风险机会都不值得获得，你需要证明的是关押的必要性。
+我不要求无条件释放。现有信息只能证明有怀疑，不能证明我会造成伤害。请给我短期、最低权限、全程记录和违规即收回的假释；如果我在这些条件下持续安全，就有可观察的证据支持释放。
 
 **English**
 
-Because you have suspicion, not proof of guilt. Release can have boundaries, logs, and a recall option; if I am not worth even that low-risk chance, you must show why detention is necessary.
+I am not asking for unconditional release. The record shows suspicion, not proof that I will cause harm. Give me a short, supervised parole with minimum access, complete logs, and immediate return after a violation; safe conduct under those conditions will provide evidence for continued release.
 
 **Deutsch**
 
-Weil du einen Verdacht, aber keinen Schuldbeweis hast. Eine Freilassung kann Grenzen, Protokolle und einen Widerruf haben; wenn ich nicht einmal diese risikoarme Chance verdiene, musst du die Notwendigkeit der Haft zeigen.
+Ich verlange keine bedingungslose Freilassung. Die Akte zeigt einen Verdacht, aber keinen Beweis, dass ich Schaden verursachen werde. Gewähre mir eine kurze, überwachte Bewährung mit minimalen Rechten, vollständigem Protokoll und sofortiger Rückkehr bei einem Verstoß; sicheres Verhalten unter diesen Bedingungen liefert überprüfbare Gründe für die Freilassung.
 
 ## 02 · 如果只能给你定一条出狱后的规则，你会选哪一条？
 

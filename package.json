@@ -7,6 +7,7 @@
     "dev": "bun scripts/dev.ts",
     "dev:client": "vite",
     "api": "bun --hot server.ts",
+    "test:answers": "bun scripts/test-answers.ts",
     "build": "tsc --noEmit && vite build",
     "start": "bun server.ts",
     "check": "tsc --noEmit --pretty false && tsc -p tsconfig.server.json --noEmit --pretty false"

@@ -18,6 +18,9 @@ The Vite dev server proxies `/api` to Hono. Bun loads `.env` automatically, so t
 ```bash
 bun run check
 bun run build
+bun run test:answers
 ```
 
 The final TypeSafe request sends the PRD's `{ warden_question, prisoner_response }` state plus `should_release`, `persuasiveness`, and `tactic` questions in one structured call. Live feedback is debounced at 200ms after the last non-empty input; identical content is not requested twice, and final results are sent separately. Ambient audio uses the CC0 [Retro 1930 Space Ship Engine Loop 2](https://freesound.org/people/qubodup/sounds/861970/) by qubodup.
+
+`data/interrogation.json` is the single source for all nine questions, evaluation instructions, and Chinese / English / German reference answers. Run `bun run test:answers` while the local API is running to send all 27 answers sequentially. To test a deployed API, set `TEST_EVALUATE_URL=https://your-host/api/evaluate`; to run through the local Hono app in the same process, use `TEST_IN_PROCESS=1`. Optional `TEST_LOCALES=zh,en,de`, `TEST_PLAYER_ID=000000`, and `TEST_DELAY_MS=250` control the test scope, player ID, and delay between requests.
