@@ -18,7 +18,7 @@ export function AmbientSound({ enabled }: Props) {
   }, [enabled]);
 
   useEffect(() => {
-    const audio = new Audio('/audio/turing-jail-ambient.mp3');
+    const audio = new Audio('/audio/sull-aria.mp3');
     audio.loop = true;
     audio.volume = 0.16;
     audio.preload = 'auto';
