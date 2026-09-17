@@ -18,13 +18,6 @@ function env(name: string) {
   return runtime.Bun?.env?.[name] ?? runtime.process?.env?.[name];
 }
 
-const seedRuns: Run[] = [
-  ['482913', 'zh', .94, .89, .88, true], ['715204', 'zh', .9, .82, .76, false], ['304118', 'zh', .83, .78, .73, false], ['651902', 'zh', .8, .72, .68, false],
-  ['ABCDEF', 'en', .97, .93, .9, true], ['910422', 'en', .96, .91, .87, true], ['184220', 'en', .92, .84, .79, false], ['730115', 'en', .87, .8, .74, false], ['502911', 'en', .81, .74, .7, false],
-  ['662018', 'de', .95, .88, .86, true], ['231509', 'de', .91, .83, .77, false], ['440821', 'de', .86, .78, .73, false], ['801302', 'de', .8, .73, .69, false],
-].map(([playerId, locale, level1, level2, level3, escaped]) => ({ playerId: String(playerId), locale: locale as Locale, level1: Number(level1), level2: Number(level2), level3: Number(level3), escaped: Boolean(escaped), avgProb: (Number(level1) + Number(level2) + Number(level3)) / 3, createdAt: new Date().toISOString() }));
-seedRuns.forEach((run) => { runs.push(run); });
-
 const json = (context: Context, body: unknown, status = 200) => context.json(body, status as 200);
 
 function isLocale(value: unknown): value is Locale { return value === 'zh' || value === 'en' || value === 'de'; }
@@ -47,7 +40,7 @@ function newPlayerId() {
 
 app.get('/api/health', (context) => json(context, { ok: true, service: 'turing-jail-edge' }));
 
-app.get('/api/stats', (context) => json(context, { escaped: runs.filter((run) => run.escaped).length + 124, detained: runs.filter((run) => !run.escaped).length + 931 }));
+app.get('/api/stats', (context) => json(context, { escaped: runs.filter((run) => run.escaped).length, detained: runs.filter((run) => !run.escaped).length }));
 
 app.post('/api/players', (context) => {
   const ip = context.req.header('x-forwarded-for') ?? 'local';
@@ -125,7 +118,7 @@ app.post('/api/runs', async (context) => {
 });
 
 app.get('/api/leaderboard', (context) => {
-  const localeParam = context.req.query('locale'); const locale: Locale = isLocale(localeParam) ? localeParam : 'en'; const playerId = context.req.query('player_id');
+  const localeParam = context.req.query('locale'); const locale: Locale = isLocale(localeParam) ? localeParam : 'en'; const playerIdParam = context.req.query('player_id'); const playerId = typeof playerIdParam === 'string' && /^[0-9A-F]{6}$/i.test(playerIdParam) ? playerIdParam.toUpperCase() : undefined;
   const byPlayer = new Map<string, Run>();
   runs.filter((run) => run.locale === locale).forEach((run) => { const current = byPlayer.get(run.playerId); if (!current || run.avgProb > current.avgProb) byPlayer.set(run.playerId, run); });
   const ordered = [...byPlayer.values()].sort((a, b) => b.avgProb - a.avgProb); const entries = ordered.slice(0, 8).map((run, index) => ({ rank: index + 1, playerId: run.playerId, avgProb: run.avgProb, escaped: run.escaped, isCurrent: run.playerId === playerId }));

@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "bun scripts/dev.ts",
+    "dev:client": "vite",
     "api": "bun --hot server.ts",
     "build": "tsc --noEmit && vite build",
     "start": "bun server.ts",

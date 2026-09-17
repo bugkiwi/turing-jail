@@ -3,9 +3,9 @@ import type { LevelResult, Locale } from '../types';
 import { copy, tacticLabels } from '../content';
 import { saveRun } from '../api';
 
-type Props = { locale: Locale; playerId: string; results: LevelResult[]; escaped: boolean; onRetry: () => void; onAppeal?: () => void; onBoard: () => void };
+type Props = { locale: Locale; playerId: string; results: LevelResult[]; escaped: boolean; runSaved: boolean; onRunSaved: () => void; onRetry: () => void; onAppeal?: () => void; onBoard: () => void };
 
-export function OutcomeView({ locale, playerId, results, escaped, onRetry, onAppeal, onBoard }: Props) {
+export function OutcomeView({ locale, playerId, results, escaped, runSaved, onRunSaved, onRetry, onAppeal, onBoard }: Props) {
   const t = copy[locale];
   const [copied, setCopied] = useState(false);
   const average = results.length ? results.reduce((sum, result) => sum + result.noul, 0) / results.length : 0;
@@ -16,10 +16,10 @@ export function OutcomeView({ locale, playerId, results, escaped, onRetry, onApp
   const saved = useRef(false);
 
   useEffect(() => {
-    if (saved.current || results.length !== 3) return;
+    if (saved.current || runSaved || results.length !== 3) return;
     saved.current = true;
-    saveRun({ playerId, locale, results, escaped }).catch(() => undefined);
-  }, [escaped, locale, playerId, results]);
+    saveRun({ playerId, locale, results, escaped }).then(onRunSaved).catch(() => { saved.current = false; });
+  }, [escaped, locale, onRunSaved, playerId, results, runSaved]);
 
   async function copyLink() {
     const url = `${window.location.origin}/?id=${playerId}&locale=${locale}`;

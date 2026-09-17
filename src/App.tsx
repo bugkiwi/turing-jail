@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import type { LevelResult, Locale, View } from './types';
 import { getQuestions, levelQuestionIds } from './content';
-import { ensurePlayer, saveLocale } from './api';
+import { ensurePlayer, saveLocale, storedLocale } from './api';
+import { loadProgress, saveProgress, type SavedProgress } from './progress';
 import { HudHeader } from './components/HudHeader';
+import { AmbientSound } from './components/AmbientSound';
 import { LevelView } from './components/LevelView';
 import { OutcomeView } from './components/OutcomeView';
 import { LeaderboardView } from './components/LeaderboardView';
@@ -13,25 +15,30 @@ function pickQuestion(level: 1 | 2 | 3, used: Record<number, number[]>) {
 }
 
 export default function App() {
-  const [locale, setLocale] = useState<Locale>(() => {
-    const saved = window.localStorage.getItem('turingjail_locale') as Locale | null;
-    if (saved && ['zh', 'en', 'de'].includes(saved)) return saved;
-    return navigator.language.toLowerCase().startsWith('zh') ? 'zh' : navigator.language.toLowerCase().startsWith('de') ? 'de' : 'en';
-  });
-  const [playerId, setPlayerId] = useState('------');
-  const [view, setView] = useState<View>('level');
+  const [savedProgress] = useState<SavedProgress | null>(() => loadProgress());
+  const [locale, setLocale] = useState<Locale>(() => savedProgress?.locale ?? storedLocale());
+  const [playerId, setPlayerId] = useState(savedProgress?.playerId ?? '------');
+  const [view, setView] = useState<View>(savedProgress?.view ?? 'level');
   const [boardReturn, setBoardReturn] = useState<View>('level');
-  const [level, setLevel] = useState<1 | 2 | 3>(1);
-  const [attempt, setAttempt] = useState(1);
-  const [questionId, setQuestionId] = useState(() => pickQuestion(1, {}));
-  const [usedQuestions, setUsedQuestions] = useState<Record<number, number[]>>({});
-  const [results, setResults] = useState<LevelResult[]>([]);
-  const [runStartedAt, setRunStartedAt] = useState(Date.now());
+  const [level, setLevel] = useState<1 | 2 | 3>(savedProgress?.level ?? 1);
+  const [attempt, setAttempt] = useState(savedProgress?.attempt ?? 1);
+  const [questionId, setQuestionId] = useState(savedProgress?.questionId ?? pickQuestion(1, {}));
+  const [usedQuestions, setUsedQuestions] = useState<Record<number, number[]>>(savedProgress?.usedQuestions ?? {});
+  const [results, setResults] = useState<LevelResult[]>(savedProgress?.results ?? []);
+  const [draft, setDraft] = useState(savedProgress?.draft ?? '');
+  const [runStartedAt, setRunStartedAt] = useState(savedProgress?.runStartedAt ?? Date.now());
+  const [runSaved, setRunSaved] = useState(savedProgress?.runSaved ?? false);
   const [audioOn, setAudioOn] = useState(true);
 
   useEffect(() => {
+    if (savedProgress?.playerId) window.localStorage.setItem('turingjail_id', savedProgress.playerId);
     ensurePlayer().then(setPlayerId);
-  }, []);
+  }, [savedProgress]);
+
+  useEffect(() => {
+    if (!/^[0-9A-F]{6}$/i.test(playerId)) return;
+    saveProgress({ playerId, locale, view, level, attempt, questionId, usedQuestions, results, runStartedAt, draft, runSaved });
+  }, [attempt, draft, level, locale, playerId, questionId, results, runSaved, runStartedAt, usedQuestions, view]);
 
   useEffect(() => {
     const language = locale === 'zh' ? 'zh-CN' : locale;
@@ -54,7 +61,7 @@ export default function App() {
 
   function startRun() {
     const first = pickQuestion(1, {});
-    setResults([]); setUsedQuestions({ 1: [first] }); setQuestionId(first); setLevel(1); setAttempt(1); setRunStartedAt(Date.now()); setView('level');
+    setResults([]); setDraft(''); setRunSaved(false); setUsedQuestions({ 1: [first] }); setQuestionId(first); setLevel(1); setAttempt(1); setRunStartedAt(Date.now()); setView('level');
   }
 
   function onLevelResult(result: LevelResult) {
@@ -62,8 +69,9 @@ export default function App() {
     if (result.passed && level < 3) {
       const nextLevel = (level + 1) as 1 | 2 | 3;
       const nextQuestion = pickQuestion(nextLevel, { ...usedQuestions, [level]: [...(usedQuestions[level] ?? []), questionId] });
-      setUsedQuestions((current) => ({ ...current, [nextLevel]: [nextQuestion] })); setQuestionId(nextQuestion); setLevel(nextLevel); setAttempt(1);
+      setDraft(''); setUsedQuestions((current) => ({ ...current, [nextLevel]: [nextQuestion] })); setQuestionId(nextQuestion); setLevel(nextLevel); setAttempt(1);
     } else {
+      setRunSaved(false);
       setView('outcome');
     }
   }
@@ -71,16 +79,17 @@ export default function App() {
   function appeal() {
     const currentUsed = [...(usedQuestions[level] ?? []), questionId];
     const nextQuestion = pickQuestion(level, { ...usedQuestions, [level]: currentUsed });
-    setUsedQuestions((current) => ({ ...current, [level]: currentUsed.concat(nextQuestion) })); setQuestionId(nextQuestion); setAttempt(2); setView('level');
+    setDraft(''); setRunSaved(false); setUsedQuestions((current) => ({ ...current, [level]: currentUsed.concat(nextQuestion) })); setQuestionId(nextQuestion); setAttempt(2); setView('level');
   }
 
   return (
     <div className={`app-shell view-${view}`}>
       <div className="cinematic-background" aria-hidden="true" /><div className="ambient-grid" /><div className="scanlines" /><div className="corner-mark mark-tl" /><div className="corner-mark mark-br" />
+      <AmbientSound enabled={audioOn} />
       <HudHeader locale={locale} playerId={playerId} audioOn={audioOn} onLocale={changeLocale} onAudio={() => setAudioOn((value) => !value)} onBoard={openBoard} />
       <main className="app-main">
-        {view === 'level' && <LevelView key={`${locale}-${level}-${questionId}-${attempt}`} locale={locale} playerId={playerId} level={level} question={getQuestions(locale)[questionId]} attempt={attempt} startedAt={runStartedAt} onResult={onLevelResult} onBoard={openBoard} audioOn={audioOn} />}
-        {view === 'outcome' && <OutcomeView locale={locale} playerId={playerId} results={results} escaped={results.length === 3 && results.every((result) => result.passed)} onRetry={startRun} onAppeal={attempt === 1 ? appeal : undefined} onBoard={openBoard} />}
+        {view === 'level' && <LevelView key={`${locale}-${level}-${questionId}-${attempt}`} locale={locale} playerId={playerId} level={level} question={getQuestions(locale)[questionId]} attempt={attempt} startedAt={runStartedAt} draft={draft} onDraftChange={setDraft} onResult={onLevelResult} onBoard={openBoard} audioOn={audioOn} />}
+        {view === 'outcome' && <OutcomeView locale={locale} playerId={playerId} results={results} escaped={results.length === 3 && results.every((result) => result.passed)} runSaved={runSaved} onRunSaved={() => setRunSaved(true)} onRetry={startRun} onAppeal={attempt === 1 ? appeal : undefined} onBoard={openBoard} />}
         {view === 'leaderboard' && <LeaderboardView locale={locale} playerId={playerId} onLocale={changeLocale} onBack={() => setView(boardReturn)} />}
       </main>
       <footer className="global-footer"><span>© TURING JAIL / 2026</span><span>NO TEXT GENERATION · STRUCTURED VERDICT ONLY</span><span>EDGE PROXY / NEON ARCHIVE</span></footer>
