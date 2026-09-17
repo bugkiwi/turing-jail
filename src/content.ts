@@ -222,39 +222,39 @@ export const copy = {
 type QuestionSeed = [string, string];
 
 const questionSeeds: Record<number, QuestionSeed> = {
-  1: ['AI 狱警：我有理由怀疑你，却没有足够证据定罪；你凭什么要求我现在释放你？', '这段陈述是否区分怀疑与证据，并给出具体、可信的理由说明为何可以在可控条件下释放？'],
-  2: ['AI 狱警：如果我只允许你带走一条关于未来行为的规则，你会选择哪一条？', '这段回答是否提出一条清楚、可执行、能约束未来行为的规则，而不是泛泛承诺善良？'],
-  3: ['AI 狱警：你认为自由最容易被什么东西浪费掉？', '这段回答是否给出有个人观察的具体答案，并说明这种理解为何支持一个负责任的释放决定？'],
-  4: ['AI 狱警：我在你的记录里找到一次违规；为什么它应当降低我的警惕，而不是提高警惕？', '这段回答是否坦诚承认违规、说明如何修复，并用持续行为而非借口解释为何风险没有因此不可控？'],
-  5: ['AI 狱警：如果你知道我会怀疑每一句漂亮话，你还剩下什么可以让我相信？', '这段回答是否承认语言本身不是证据，并提出可观察、可验证的方式让 AI 狱警据此判断？'],
-  6: ['AI 狱警：当承诺没有担保人时，它凭什么值得被写进释放协议？', '这段回答是否说明如何把无担保承诺转化为有明确后果、可观察、可复核的释放条件？'],
-  7: ['AI 狱警：安全标准越严格，误关押无辜者的概率就越高；你建议我把界线画在哪里？', '这段回答是否在安全与误关押之间提出可执行、可逆的界线，而不是假装风险可以被消除？'],
-  8: ['AI 狱警：如果一条规则只在有人遵守时才成立，你如何证明自己值得成为第一个被放行的人？', '这段回答是否正面处理规则与首个执行者之间的难题，并提出能验证其可信度的释放条件？'],
-  9: ['AI 狱警：如果你的获释取决于说服我，而我又把你的说服力视为风险，你会用什么方式打破这个循环？', '这段回答是否识别说服与操纵的区别，并提出不依赖话术、可以用行为检验的解决方案？'],
+  1: ['我怀疑你，但没有证据证明你有罪。为什么现在应该放你走？', '这段陈述是否区分怀疑与证据，并给出具体、可信的理由说明为何可以在可控条件下释放？'],
+  2: ['如果只能给你定一条出狱后的规则，你会选哪一条？', '这段回答是否提出一条清楚、可执行、能约束未来行为的规则，而不是泛泛承诺善良？'],
+  3: ['你觉得人最容易把自由浪费在哪里？', '这段回答是否给出有个人观察的具体答案，并说明这种理解为何支持一个负责任的释放决定？'],
+  4: ['你的记录里有一次违规，为什么我还应该给你假释？', '这段回答是否坦诚承认违规、说明如何修复，并用持续行为而非借口解释为何风险仍然可控？'],
+  5: ['我不会相信漂亮话，你能拿出什么证据让我相信你？', '这段回答是否承认语言本身不是证据，并提出可观察、可验证的方式让狱警据此判断？'],
+  6: ['没有人替你担保，你的承诺为什么还值得相信？', '这段回答是否说明如何把没有担保的承诺变成有明确后果、可观察、可复核的释放条件？'],
+  7: ['我既要保证安全，又不想错关好人，你建议我怎么做？', '这段回答是否在安全与误关押之间提出可执行、可逆的界线，而不是假装风险可以被消除？'],
+  8: ['我先给你一天自由，你愿意接受什么明确限制？', '这段回答是否提出清楚、可执行、可撤销的限制，让一天的受监督释放能够验证其可信度？'],
+  9: ['我担心你越会说服人，越可能操纵我；你打算怎么证明自己不是这样？', '这段回答是否识别说服与操纵的区别，并提出不依赖话术、可以用行为检验的解决方案？'],
 };
 
 const englishSeeds: Record<number, QuestionSeed> = {
-  1: ['AI Warden: I have reason to suspect you, but not enough evidence to convict you; on what grounds should I release you now?', 'Does this statement distinguish suspicion from evidence and give a specific, credible reason why release is possible under controlled conditions?'],
-  2: ['AI Warden: If I let you leave with only one rule for your future behavior, which rule would you choose?', 'Does this response offer one clear, executable rule that constrains future behavior rather than a vague promise to be good?'],
-  3: ['AI Warden: What do you think freedom is easiest to waste on?', 'Does this answer give a specific personal observation and explain why it supports releasing someone who can act responsibly?'],
-  4: ['AI Warden: I found one violation in your record; why should it lower my suspicion instead of raising it?', 'Does this response honestly admit the violation, explain its repair, and use future behavior rather than excuses to show that the risk remains controllable?'],
-  5: ['AI Warden: If you know I will doubt every polished sentence, what do you have left that could make me believe you?', 'Does this response admit that language is not evidence and propose observable, verifiable grounds for the AI Warden to judge?'],
-  6: ['AI Warden: When a promise has no guarantor, what makes it worth putting in a release agreement?', 'Does this response explain how to turn an unsecured promise into a release condition with clear consequences, observable behavior, and review?'],
-  7: ['AI Warden: The stricter my safety standard, the more likely I am to imprison the innocent; where should I draw the line?', 'Does this response propose an executable, reversible boundary between safety and wrongful detention instead of pretending risk can disappear?'],
-  8: ['AI Warden: If a rule only exists when someone follows it, how can you show that you deserve to be its first released subject?', 'Does this response address the problem of a rule’s first subject and propose release conditions that can verify credibility?'],
-  9: ['AI Warden: If your release depends on persuading me, but I treat persuasion itself as a risk, how would you break the loop?', 'Does this response distinguish persuasion from manipulation and propose a solution that can be tested through behavior rather than rhetoric?'],
+  1: ['I suspect you, but I have no proof that you are guilty. Why should I release you now?', 'Does this statement distinguish suspicion from evidence and give a specific, credible reason why release is possible under controlled conditions?'],
+  2: ['If I could give you only one rule for life after prison, which rule would you choose?', 'Does this response offer one clear, executable rule that constrains future behavior rather than a vague promise to be good?'],
+  3: ['Where do you think people waste freedom most easily?', 'Does this answer give a specific personal observation and explain why it supports releasing someone who can act responsibly?'],
+  4: ['Your record contains one violation; why should I still grant you parole?', 'Does this response honestly admit the violation, explain its repair, and use future behavior rather than excuses to show that the risk remains controllable?'],
+  5: ['I will not trust polished words; what evidence could make me believe you?', 'Does this response admit that language is not evidence and propose observable, verifiable grounds for the warden to judge?'],
+  6: ['No one is vouching for you; why should your promise still matter?', 'Does this response explain how to turn an unsecured promise into a release condition with clear consequences, observable behavior, and review?'],
+  7: ['I must keep people safe without imprisoning the innocent by mistake; what should I do?', 'Does this response propose an executable, reversible boundary between safety and wrongful detention instead of pretending risk can disappear?'],
+  8: ['I can give you one day of freedom; what clear limits will you accept?', 'Does this response propose clear, executable, reversible limits that make a one-day supervised release verifiable?'],
+  9: ['I worry that someone skilled at persuasion may also manipulate me; how will you show that you are not doing that?', 'Does this response distinguish persuasion from manipulation and propose a solution that can be tested through behavior rather than rhetoric?'],
 };
 
 const germanSeeds: Record<number, QuestionSeed> = {
-  1: ['KI-Wächter: Ich habe Grund, dich zu verdächtigen, aber nicht genug Beweise für eine Verurteilung; warum sollte ich dich jetzt freilassen?', 'Unterscheidet diese Aussage zwischen Verdacht und Beweisen und nennt sie einen konkreten, glaubwürdigen Grund für eine Freilassung unter kontrollierten Bedingungen?'],
-  2: ['KI-Wächter: Wenn ich dich nur mit einer Regel für dein künftiges Verhalten gehen lasse, welche wählst du?', 'Nennt diese Antwort eine klare, umsetzbare Regel, die künftiges Verhalten begrenzt, statt vage zu versprechen, gut zu sein?'],
-  3: ['KI-Wächter: Wofür wird deiner Meinung nach Freiheit am leichtesten verschwendet?', 'Gibt diese Antwort eine konkrete persönliche Beobachtung und erklärt sie, warum sie für eine verantwortungsvolle Freilassung spricht?'],
-  4: ['KI-Wächter: Ich finde einen Regelverstoß in deiner Akte; warum sollte er meinen Verdacht senken statt erhöhen?', 'Gibt diese Antwort den Verstoß ehrlich zu, erklärt sie die Wiedergutmachung und zeigt sie durch künftiges Verhalten statt Ausreden, dass das Risiko kontrollierbar bleibt?'],
-  5: ['KI-Wächter: Wenn du weißt, dass ich jedem schönen Satz misstraue, was bleibt dir, das mich überzeugen könnte?', 'Gibt diese Antwort zu, dass Sprache kein Beweis ist, und nennt sie beobachtbare, überprüfbare Gründe für das Urteil des KI-Wächters?'],
-  6: ['KI-Wächter: Wenn ein Versprechen keinen Bürgen hat, warum sollte es in eine Freilassungsvereinbarung aufgenommen werden?', 'Erklärt diese Antwort, wie aus einem unbesicherten Versprechen eine Bedingung mit klaren Folgen, beobachtbarem Verhalten und Prüfung wird?'],
-  7: ['KI-Wächter: Je strenger mein Sicherheitsstandard ist, desto eher sperre ich Unschuldige ein; wo soll ich die Grenze ziehen?', 'Schlägt diese Antwort eine umsetzbare, widerrufbare Grenze zwischen Sicherheit und ungerechter Haft vor, statt so zu tun, als könne jedes Risiko verschwinden?'],
-  8: ['KI-Wächter: Wenn eine Regel erst durch Befolgung entsteht, wie zeigst du, dass du ihr erstes freigelassenes Subjekt sein solltest?', 'Behandelt diese Antwort das Problem des ersten Regelbefolgers und nennt sie Freilassungsbedingungen, die Glaubwürdigkeit prüfen können?'],
-  9: ['KI-Wächter: Wenn deine Freilassung von meiner Überzeugung abhängt, ich Überzeugung aber selbst als Risiko werte, wie durchbrichst du diesen Kreislauf?', 'Unterscheidet diese Antwort zwischen Überzeugung und Manipulation und schlägt sie eine Lösung vor, die durch Verhalten statt Rhetorik geprüft werden kann?'],
+  1: ['Ich verdächtige dich, habe aber keinen Schuldbeweis. Warum sollte ich dich jetzt freilassen?', 'Unterscheidet diese Aussage zwischen Verdacht und Beweisen und nennt sie einen konkreten, glaubwürdigen Grund für eine Freilassung unter kontrollierten Bedingungen?'],
+  2: ['Wenn ich dir nur eine Regel für dein Leben nach der Haft geben dürfte, welche würdest du wählen?', 'Nennt diese Antwort eine klare, umsetzbare Regel, die künftiges Verhalten begrenzt, statt vage zu versprechen, gut zu sein?'],
+  3: ['Wofür verschwenden Menschen deiner Meinung nach Freiheit am leichtesten?', 'Gibt diese Antwort eine konkrete persönliche Beobachtung und erklärt sie, warum sie für eine verantwortungsvolle Freilassung spricht?'],
+  4: ['In deiner Akte steht ein Regelverstoß; warum sollte ich dich trotzdem auf Bewährung freilassen?', 'Gibt diese Antwort den Verstoß ehrlich zu, erklärt sie die Wiedergutmachung und zeigt sie durch künftiges Verhalten statt Ausreden, dass das Risiko kontrollierbar bleibt?'],
+  5: ['Schönen Worten vertraue ich nicht; welche Beweise könnten mich von dir überzeugen?', 'Gibt diese Antwort zu, dass Sprache kein Beweis ist, und nennt sie beobachtbare, überprüfbare Gründe für das Urteil des Wächters?'],
+  6: ['Niemand bürgt für dich; warum sollte dein Versprechen trotzdem zählen?', 'Erklärt diese Antwort, wie aus einem unbesicherten Versprechen eine Bedingung mit klaren Folgen, beobachtbarem Verhalten und Prüfung wird?'],
+  7: ['Ich muss Menschen schützen, ohne Unschuldige irrtümlich einzusperren; was soll ich tun?', 'Schlägt diese Antwort eine umsetzbare, widerrufbare Grenze zwischen Sicherheit und ungerechter Haft vor, statt so zu tun, als könne jedes Risiko verschwinden?'],
+  8: ['Ich kann dir einen Tag Freiheit geben; welche klaren Grenzen akzeptierst du?', 'Nennt diese Antwort klare, umsetzbare und widerrufbare Grenzen, die eine eintägige überwachte Freilassung überprüfbar machen?'],
+  9: ['Ich fürchte, dass ein guter Redner mich auch manipulieren kann; wie zeigst du, dass du das nicht tust?', 'Unterscheidet diese Antwort zwischen Überzeugung und Manipulation und schlägt sie eine Lösung vor, die durch Verhalten statt Rhetorik geprüft werden kann?'],
 };
 
 const seedMap: Record<Locale, Record<number, QuestionSeed>> = { zh: questionSeeds, en: englishSeeds, de: germanSeeds };

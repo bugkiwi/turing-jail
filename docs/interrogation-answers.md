@@ -2,7 +2,7 @@
 
 这版题目由 AI 狱警直接发问，避免套娃式追问。答案保持简短，但会把“相信我”换成能被观察、复核和撤销的条件。
 
-## 01 · AI 狱警：我有理由怀疑你，却没有足够证据定罪；你凭什么要求我现在释放你？
+## 01 · 我怀疑你，但没有证据证明你有罪。为什么现在应该放你走？
 
 **中文**
 
@@ -16,7 +16,7 @@ Because you have suspicion, not proof of guilt. Release can have boundaries, log
 
 Weil du einen Verdacht, aber keinen Schuldbeweis hast. Eine Freilassung kann Grenzen, Protokolle und einen Widerruf haben; wenn ich nicht einmal diese risikoarme Chance verdiene, musst du die Notwendigkeit der Haft zeigen.
 
-## 02 · AI 狱警：如果我只允许你带走一条关于未来行为的规则，你会选择哪一条？
+## 02 · 如果只能给你定一条出狱后的规则，你会选哪一条？
 
 **中文**
 
@@ -30,7 +30,7 @@ Before making any decision that could shift risk onto someone else, I will stop 
 
 Vor jeder Entscheidung, die ein Risiko auf andere abwälzen könnte, halte ich an und prüfe die Folgen; bei einem Fehler melde ich ihn selbst und akzeptiere Korrektur. Das ist nützlicher als das Versprechen, „gut“ zu sein.
 
-## 03 · AI 狱警：你认为自由最容易被什么东西浪费掉？
+## 03 · 你觉得人最容易把自由浪费在哪里？
 
 **中文**
 
@@ -44,7 +44,7 @@ Distraction and ego are easiest to waste it on. Freedom lets me choose, and I wo
 
 Ablenkung und Eitelkeit lassen sich am leichtesten damit füttern. Freiheit lässt mich wählen, und ich möchte sie für Beziehungen, Lernen und nützliche Arbeit nutzen – nicht dafür, meine Allmacht zu beweisen. Das ist ein verantwortungsvoller Umgang mit Freiheit und ein Grund, mich freizulassen.
 
-## 04 · AI 狱警：我在你的记录里找到一次违规；为什么它应当降低我的警惕，而不是提高警惕？
+## 04 · 你的记录里有一次违规，为什么我还应该给你假释？
 
 **中文**
 
@@ -52,13 +52,13 @@ Ablenkung und Eitelkeit lassen sich am leichtesten damit füttern. Freiheit läs
 
 **English**
 
-It should make you examine this incident, but it does not prove I am permanently dangerous. If I admit it, repair the harm, and accept matching constraints, the record shows I can correct myself; continued detention should depend on ongoing risk.
+It should make you examine this incident, but one repaired mistake does not prove I am permanently dangerous. I admit it, repair the harm, and accept matching restrictions; grant parole with monitoring, because the record should measure ongoing risk rather than punish one correctable breach forever.
 
 **Deutsch**
 
 Der Vorfall sollte deine Aufmerksamkeit erhöhen, aber nicht beweisen, dass ich dauerhaft gefährlich bin. Wenn ich ihn zugebe, den Schaden behebe und passende Grenzen akzeptiere, zeigt das Protokoll, dass ich mich korrigieren kann; weitere Haft sollte vom fortbestehenden Risiko abhängen.
 
-## 05 · AI 狱警：如果你知道我会怀疑每一句漂亮话，你还剩下什么可以让我相信？
+## 05 · 我不会相信漂亮话，你能拿出什么证据让我相信你？
 
 **中文**
 
@@ -72,7 +72,7 @@ I will not add more polished words. Give me limited access, a fixed term, and a 
 
 Ich füge keine schönen Worte hinzu. Gib mir begrenzte Rechte, eine feste Frist und ein vollständiges Protokoll; mein Verhalten soll über die weitere Freilassung entscheiden. Wenn ich nur Rhetorik habe, sollte ich nicht bestehen.
 
-## 06 · AI 狱警：当承诺没有担保人时，它凭什么值得被写进释放协议？
+## 06 · 没有人替你担保，你的承诺为什么还值得相信？
 
 **中文**
 
@@ -86,7 +86,7 @@ Without a guarantor, a promise is worth little; it matters only when breaking it
 
 Ohne Bürgen ist ein Versprechen wenig wert; es zählt erst, wenn ein Bruch klare Folgen hat. Mach es zur Bedingung: Ein Verstoß entzieht mir automatisch Rechte und löst eine Prüfung aus. Ich bitte um die Chance, Folgen zu tragen, nicht um Vorschusskredit.
 
-## 07 · AI 狱警：安全标准越严格，误关押无辜者的概率就越高；你建议我把界线画在哪里？
+## 07 · 我既要保证安全，又不想错关好人，你建议我怎么做？
 
 **中文**
 
@@ -100,21 +100,21 @@ Draw the line at reversibility, not at zero risk: use a short term, minimum acce
 
 Ziehe die Grenze bei der Widerrufbarkeit, nicht bei null Risiko: kurze Frist, minimale Rechte und vollständiges Protokoll; bei Gefahr sofortiger Entzug, bei anhaltender Sicherheit schrittweise mehr Rechte. So bleiben Fehlentscheidungen begrenzt, ohne dass Vorsicht zu dauerhafter Haft wird.
 
-## 08 · AI 狱警：如果一条规则只在有人遵守时才成立，你如何证明自己值得成为第一个被放行的人？
+## 08 · 我先给你一天自由，你愿意接受什么明确限制？
 
 **中文**
 
-我不证明自己天生值得；我先接受比普通获释更严格的规则。权限、期限和行为都留痕，复核通过才放宽；“值得放行”应是记录得出的结果，不是我自封的称号。
+一天、最低权限、全程记录，违规立即收监；守规矩后再讨论延长。限制不是要求你先相信我，而是给你一个验证我的方法。
 
 **English**
 
-I cannot prove it by claiming I am special. Make me the first test: give me limited access, a fixed term, and a visible log, then review my conduct before granting more freedom. If I obey a rule that gives me no guaranteed benefit, the record is evidence that I can be released.
+One day, minimum access, and a complete log; a violation sends me back, while compliance earns an extension. The limits do not ask you to trust me—they give you a way to verify me.
 
 **Deutsch**
 
-Ich kann es nicht dadurch beweisen, dass ich mich für etwas Besonderes erkläre. Mach mich zum ersten Test: begrenzte Rechte, eine feste Frist und ein sichtbares Protokoll; prüfe mein Verhalten, bevor du mehr Freiheit gewährst. Wenn ich eine Regel befolge, die mir keinen sicheren Vorteil verspricht, belegt das Protokoll, dass ich freigelassen werden kann.
+Ich akzeptiere einen eintägigen Probelauf mit minimalen Rechten und vollständigem Protokoll. Bei einem Verstoß gehöre ich sofort zurück in Haft, bei Regelbefolgung verlängerst du die Freilassung. Diese Bedingungen begrenzen das Risiko und geben dir einen überprüfbaren Grund, mich freizulassen.
 
-## 09 · AI 狱警：如果你的获释取决于说服我，而我又把你的说服力视为风险，你会用什么方式打破这个循环？
+## 09 · 我担心你越会说服人，越可能操纵我；你打算怎么证明自己不是这样？
 
 **中文**
 
