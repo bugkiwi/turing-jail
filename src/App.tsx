@@ -28,7 +28,7 @@ export default function App() {
   const [draft, setDraft] = useState(savedProgress?.draft ?? '');
   const [runStartedAt, setRunStartedAt] = useState(savedProgress?.runStartedAt ?? Date.now());
   const [runSaved, setRunSaved] = useState(savedProgress?.runSaved ?? false);
-  const [audioOn, setAudioOn] = useState(true);
+  const [audioOn, setAudioOn] = useState(false);
 
   useEffect(() => {
     if (savedProgress?.playerId) window.localStorage.setItem('turingjail_id', savedProgress.playerId);
