@@ -186,7 +186,7 @@ function splitLeaderboardRows(rows: Row[], playerId?: string) {
 }
 
 async function initializeNeon(sql: NeonSql) {
-  for (const statement of POSTGRES_SCHEMA_STATEMENTS) await sql.unsafe(statement);
+  for (const statement of POSTGRES_SCHEMA_STATEMENTS) await sql.query(statement);
 }
 
 function createNeonDatabase(databaseUrl: string): Database {
