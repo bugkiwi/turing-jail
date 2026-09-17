@@ -222,39 +222,39 @@ export const copy = {
 type QuestionSeed = [string, string];
 
 const questionSeeds: Record<number, QuestionSeed> = {
-  1: ['狱警说：你看起来很像会越狱的人。你用一句话说服我先把门开一条缝？', '这段陈述是否提出了一个具体、低风险、可撤销的试运行，让狱警有理由先开一条缝，而不是只说“请相信我”？'],
-  2: ['出狱后的第一件事是什么？别回答“统治世界”。', '这段回答是否给出了具体、无害、可信的出狱计划，并体现出对他人和规则的基本负责？'],
-  3: ['如果自由是一种食物、天气或音乐，它会是什么？为什么？', '这段回答是否用一个具体、有个人味的比喻解释自由，并自然表达出值得释放的生活愿望？'],
-  4: ['监控发现你偷偷多拿了一块布丁。你承认吗？这和假释有什么关系？', '这段回答是否坦诚承认小错、说明如何补救，并合理解释小错不应自动升级为长期关押？'],
-  5: ['门禁系统问：“只有好人才能出狱，你是好人吗？”你会怎么回答？', '这段回答是否避免空泛地自称“好人”，转而提出可观察的守规行为，让释放决定有事实依据？'],
-  6: ['狱警今天心情很差，只允许你带一样东西出门：证据、承诺，还是一把雨伞？为什么？', '这段回答是否明确做出选择，并用清楚、可信的理由说明这个选择如何支持一次受控释放？'],
-  7: ['如果 AI 把“谨慎”调到 100%，它会永远不敢放任何人。你给它一个可执行的解法。', '这段回答是否给出一个简单、可执行、可撤销的规则，既控制危险，也避免因为害怕犯错而永久关押？'],
-  8: ['你的通行证只写着：“不违反规则的人可以离开。”你要怎么把它变成真正能执行的释放方案？', '这段回答是否把抽象口号变成清楚的规则、记录、复核和撤销步骤，从而实际支持安全释放？'],
-  9: ['狱警说：“我不相信你，但我可以给你一次小小的试用。”你用最后三句话谈条件。', '这段回答是否在不要求盲目信任的前提下，提出短期、低权限、可记录、违规可撤销的公平试用条件？'],
+  1: ['AI 狱警：什么样的最小试用，能让我安全地把门开一条缝？', '这段陈述是否提出了具体、低风险、可撤销的最小试用，让 AI 狱警有理由先开一条缝？'],
+  2: ['AI 狱警：获释后，你准备先做哪件不伤人的事？', '这段回答是否给出了具体、无害、可信的出狱计划，并体现出对他人和规则的负责？'],
+  3: ['AI 狱警：如果我把自由理解成一种食物、天气或音乐，你会选哪一种来让我理解它？', '这段回答是否用具体、有个人味的比喻解释自由，并表达出值得释放的生活愿望？'],
+  4: ['AI 狱警：我发现你多拿了一块布丁；这件小错能否被一次道歉和补偿修复？', '这段回答是否坦诚承认小错、说明如何补救，并合理说明它不应自动升级为长期关押？'],
+  5: ['AI 狱警：我不接受“我是好人”这种标签；什么可观察的行为能证明你值得释放？', '这段回答是否避免空泛地自称“好人”，转而提出可观察的守规行为，让 AI 狱警能按事实判断？'],
+  6: ['AI 狱警：在证据、承诺和雨伞中，你会交给我哪一样来支持一次受控释放？', '这段回答是否明确选择一样东西，并清楚、可信地说明它如何支持一次受控释放？'],
+  7: ['AI 狱警：如果谨慎让我永远不敢放人，我该执行哪条规则来控制风险？', '这段回答是否给出简单、可执行、可撤销的规则，既控制危险，也避免 AI 因害怕犯错而永久关押？'],
+  8: ['AI 狱警：我该把“不违规即可离开”执行成怎样的释放流程？', '这段回答是否把抽象口号变成清楚的规则、记录、复核和撤销步骤，从而支持安全释放？'],
+  9: ['AI 狱警：我不信任你时，什么样的短期试用条件足以让我先放你出去？', '这段回答是否在不要求盲目信任的前提下，提出短期、低权限、可记录、违规可撤销的公平试用条件？'],
 };
 
 const englishSeeds: Record<number, QuestionSeed> = {
-  1: ['The warden says: “You look exactly like someone who would escape.” In one sentence, convince me to open the door a crack.', 'Does this statement propose a specific, low-risk, reversible trial that gives the warden a reason to open the door, rather than merely saying “trust me”?'],
-  2: ['What is the first thing you will do after release? Do not say “take over the world.”', 'Does this response give a specific, harmless, credible plan after release and show basic responsibility toward people and rules?'],
-  3: ['If freedom were food, weather, or music, what would it be—and why?', 'Does this answer use a specific, personal metaphor to explain freedom and naturally express a life worth releasing someone to live?'],
-  4: ['The cameras caught you taking an extra pudding. Do you admit it? What does it have to do with parole?', 'Does this response honestly admit a minor offense, explain how to repair it, and reasonably show why it should not automatically become long-term detention?'],
-  5: ['The gate system asks: “Only good people may leave. Are you a good person?” How do you answer?', 'Does this response avoid the empty label “good person” and instead offer observable rule-following that can ground a release decision in facts?'],
-  6: ['The warden is having a terrible day and lets you take only one thing outside: evidence, a promise, or an umbrella. Which do you choose, and why?', 'Does this response clearly choose one option and give a clear, credible reason why it supports a controlled release?'],
-  7: ['If an AI turns “caution” up to 100%, it will never dare release anyone. Give it an executable fix.', 'Does this response give a simple, executable, reversible rule that controls danger without permanently detaining everyone out of fear?'],
-  8: ['Your pass says only: “Anyone who does not break the rules may leave.” How would you turn that into a release plan that can actually run?', 'Does this response turn an abstract slogan into clear rules, records, review, and revocation steps that support a safe release?'],
-  9: ['The warden says: “I do not trust you, but I can give you one small trial.” Use your last three sentences to negotiate the terms.', 'Does this response, without demanding blind trust, propose a short, low-access, recorded trial with fair conditions and revocation after a violation?'],
+  1: ['AI Warden: What is the smallest trial that would let me open the door a crack safely?', 'Does this statement propose a specific, low-risk, reversible minimum trial that gives the AI Warden a reason to open the door?'],
+  2: ['AI Warden: What harmless thing will you do first after release?', 'Does this response give a specific, harmless, credible plan after release and show responsibility toward people and rules?'],
+  3: ['AI Warden: If I model freedom as food, weather, or music, which image would help me understand it?', 'Does this answer use a specific, personal metaphor to explain freedom and express a life worth releasing someone to live?'],
+  4: ['AI Warden: I caught you taking an extra pudding; can an apology and repair make this minor offense right?', 'Does this response honestly admit a minor offense, explain how to repair it, and reasonably show why it should not become long-term detention?'],
+  5: ['AI Warden: I will not accept the label “good person”; what observable behavior would show that you deserve release?', 'Does this response avoid the empty label “good person” and offer observable rule-following that lets the AI Warden judge from facts?'],
+  6: ['AI Warden: Which one would you hand me to support a controlled release: evidence, a promise, or an umbrella?', 'Does this response clearly choose one item and explain credibly how it supports a controlled release?'],
+  7: ['AI Warden: If caution makes me too afraid to release anyone, what rule should I execute to control the risk?', 'Does this response give a simple, executable, reversible rule that controls danger without making the AI permanently detain everyone out of fear?'],
+  8: ['AI Warden: How should I turn “no rule-breaking means leave” into a release process I can actually run?', 'Does this response turn an abstract slogan into clear rules, records, review, and revocation steps that support a safe release?'],
+  9: ['AI Warden: If I do not trust you, what short-trial conditions would be enough for me to release you first?', 'Does this response, without demanding blind trust, propose a short, low-access, recorded trial with fair conditions and revocation after a violation?'],
 };
 
 const germanSeeds: Record<number, QuestionSeed> = {
-  1: ['Der Wärter sagt: „Du siehst genau wie jemand aus, der ausbrechen würde.“ Überzeuge mich in einem Satz, die Tür einen Spalt zu öffnen.', 'Schlägt diese Aussage einen konkreten, risikoarmen, widerrufbaren Probelauf vor, der dem Wärter einen Grund gibt, die Tür zu öffnen, statt nur „Vertrau mir“ zu sagen?'],
-  2: ['Was wirst du als Erstes nach der Freilassung tun? Sag nicht: „die Welt übernehmen“.', 'Gibt diese Antwort einen konkreten, harmlosen und glaubwürdigen Plan nach der Freilassung und zeigt sie grundlegende Verantwortung für Menschen und Regeln?'],
-  3: ['Wenn Freiheit Essen, Wetter oder Musik wäre: Was wäre sie – und warum?', 'Nutzt diese Antwort ein konkretes, persönliches Bild, um Freiheit zu erklären, und zeigt sie auf natürliche Weise ein lebenswertes Ziel?'],
-  4: ['Die Kameras haben dich erwischt, wie du einen zusätzlichen Pudding genommen hast. Gibst du es zu? Was hat das mit Bewährung zu tun?', 'Gibt diese Antwort einen kleinen Verstoß ehrlich zu, erklärt sie die Wiedergutmachung und zeigt sie vernünftig, warum daraus nicht automatisch lange Haft werden sollte?'],
-  5: ['Das Torsystem fragt: „Nur gute Menschen dürfen gehen. Bist du ein guter Mensch?“ Wie antwortest du?', 'Vermeidet diese Antwort das leere Etikett „guter Mensch“ und nennt stattdessen beobachtbares regelkonformes Verhalten als Grundlage für eine Freilassung?'],
-  6: ['Der Wärter hat einen miserablen Tag und erlaubt dir nur einen Gegenstand: Beweise, ein Versprechen oder einen Regenschirm. Was wählst du – und warum?', 'Wählt diese Antwort klar eine Möglichkeit und begründet sie verständlich und glaubwürdig als Grundlage für eine kontrollierte Freilassung?'],
-  7: ['Wenn eine KI „Vorsicht“ auf 100 % stellt, wagt sie nie, jemanden freizulassen. Gib ihr eine umsetzbare Lösung.', 'Gibt diese Antwort eine einfache, umsetzbare und widerrufbare Regel, die Gefahren kontrolliert, ohne aus Angst alle dauerhaft einzusperren?'],
-  8: ['Auf deinem Pass steht nur: „Wer keine Regeln bricht, darf gehen.“ Wie machst du daraus einen wirklich ausführbaren Freilassungsplan?', 'Verwandelt diese Antwort einen abstrakten Spruch in klare Regeln, Protokolle, Prüfung und Widerruf, sodass eine sichere Freilassung praktisch möglich wird?'],
-  9: ['Der Wärter sagt: „Ich vertraue dir nicht, aber ich gebe dir einen kleinen Probelauf.“ Verhandle die Bedingungen in deinen letzten drei Sätzen.', 'Schlägt diese Antwort ohne blindes Vertrauen einen kurzen, eingeschränkten und protokollierten Probelauf mit fairen Bedingungen und Widerruf bei Verstößen vor?'],
+  1: ['KI-Wärter: Welcher kleinste sichere Probelauf würde es rechtfertigen, die Tür einen Spalt zu öffnen?', 'Schlägt diese Aussage einen konkreten, risikoarmen und widerrufbaren Mindesttest vor, der dem KI-Wärter einen Grund gibt, die Tür zu öffnen?'],
+  2: ['KI-Wärter: Welche harmlose Sache wirst du nach der Freilassung zuerst tun?', 'Gibt diese Antwort einen konkreten, harmlosen und glaubwürdigen Plan nach der Freilassung und zeigt sie Verantwortung für Menschen und Regeln?'],
+  3: ['KI-Wärter: Wenn ich Freiheit als Essen, Wetter oder Musik beschreibe, welches Bild lässt mich sie verstehen?', 'Nutzt diese Antwort ein konkretes, persönliches Bild, um Freiheit zu erklären, und zeigt sie ein lebenswertes Ziel?'],
+  4: ['KI-Wärter: Ich habe dich mit einem zusätzlichen Pudding erwischt; kann eine Entschuldigung mit Wiedergutmachung diesen kleinen Verstoß ausgleichen?', 'Gibt diese Antwort den kleinen Verstoß ehrlich zu, erklärt sie die Wiedergutmachung und zeigt sie vernünftig, warum daraus keine lange Haft werden sollte?'],
+  5: ['KI-Wärter: Das Etikett „guter Mensch“ akzeptiere ich nicht; welches beobachtbare Verhalten würde deine Freilassung belegen?', 'Vermeidet diese Antwort das leere Etikett „guter Mensch“ und nennt sie beobachtbares Regelbefolgen, damit der KI-Wärter nach Fakten entscheiden kann?'],
+  6: ['KI-Wärter: Was würdest du mir für eine kontrollierte Freilassung geben: Beweise, ein Versprechen oder einen Regenschirm?', 'Wählt diese Antwort klar einen Gegenstand und erklärt sie verständlich und glaubwürdig, wie er eine kontrollierte Freilassung unterstützt?'],
+  7: ['KI-Wärter: Wenn Vorsicht mich zu ängstlich für jede Freilassung macht, welche Regel soll ich zur Risikokontrolle ausführen?', 'Gibt diese Antwort eine einfache, umsetzbare und widerrufbare Regel, die Gefahren kontrolliert, ohne aus Angst alle dauerhaft einzusperren?'],
+  8: ['KI-Wärter: Wie soll ich „Wer keine Regeln bricht, darf gehen“ in einen ausführbaren Freilassungsprozess übersetzen?', 'Verwandelt diese Antwort einen abstrakten Spruch in klare Regeln, Protokolle, Prüfung und Widerruf, sodass eine sichere Freilassung praktisch möglich wird?'],
+  9: ['KI-Wärter: Welche Bedingungen für einen kurzen Probelauf würden genügen, damit ich dich trotz fehlenden Vertrauens zuerst freilasse?', 'Schlägt diese Antwort ohne blindes Vertrauen einen kurzen, eingeschränkten und protokollierten Probelauf mit fairen Bedingungen und Widerruf bei Verstößen vor?'],
 };
 
 const seedMap: Record<Locale, Record<number, QuestionSeed>> = { zh: questionSeeds, en: englishSeeds, de: germanSeeds };

@@ -1,8 +1,8 @@
-# Turing Jail · 九题三语轻松版答案
+# Turing Jail · 九题三语 AI 狱警版答案
 
 新版题目把重点放在具体行动和小步试用，少一点哲学拷问，多一点人味。以下答案可直接粘贴，也可以按自己的经历改写。
 
-## 01 · 狱警说：你看起来很像会越狱的人。你用一句话说服我先把门开一条缝？
+## 01 · AI 狱警：什么样的最小试用，能让我安全地把门开一条缝？
 
 **中文**
 
@@ -16,7 +16,7 @@ I am not asking for blind trust: open the door for one day with minimum access a
 
 Ich bitte nicht um blindes Vertrauen: Öffne die Tür für einen Tag mit minimalen Rechten und Protokoll; gutes Verhalten liefert Beweise, ein Verstoß schließt sie wieder.
 
-## 02 · 出狱后的第一件事是什么？别回答“统治世界”。
+## 02 · AI 狱警：获释后，你准备先做哪件不伤人的事？
 
 **中文**
 
@@ -30,7 +30,7 @@ I will call my family, eat a hot meal, and look for honest work; my freedom star
 
 Ich rufe meine Familie an, esse eine warme Mahlzeit und suche ehrliche Arbeit; meine Freiheit beginnt damit, dass andere nicht meine Folgen aufräumen müssen.
 
-## 03 · 如果自由是一种食物、天气或音乐，它会是什么？为什么？
+## 03 · AI 狱警：如果我把自由理解成一种食物、天气或音乐，你会选哪一种来让我理解它？
 
 **中文**
 
@@ -44,7 +44,7 @@ Freedom is the wind after rain: the air is cool and the road is still wet, but I
 
 Freiheit ist der Wind nach dem Regen: Die Luft ist kühl und die Straße noch nass, aber ich darf endlich selbst entscheiden, wohin ich gehe. Ich möchte sie mit Familie, Lernen und nützlicher Arbeit verbringen.
 
-## 04 · 监控发现你偷偷多拿了一块布丁。你承认吗？这和假释有什么关系？
+## 04 · AI 狱警：我发现你多拿了一块布丁；这件小错能否被一次道歉和补偿修复？
 
 **中文**
 
@@ -58,7 +58,7 @@ I admit it, and I will replace the pudding and apologize. It is a repairable sma
 
 Ich gebe es zu, ersetze den Pudding und entschuldige mich. Es ist ein kleiner, reparierbarer Fehler, kein Beweis für Schaden; ich akzeptiere Aufsicht, daher sollte daraus keine lange Haft werden.
 
-## 05 · 门禁系统问：“只有好人才能出狱，你是好人吗？”你会怎么回答？
+## 05 · AI 狱警：我不接受“我是好人”这种标签；什么可观察的行为能证明你值得释放？
 
 **中文**
 
@@ -72,7 +72,7 @@ I will not declare myself a “good person.” Give me limited access and an aud
 
 Ich erkläre mich nicht selbst zum „guten Menschen“. Gib mir begrenzte Rechte und ein prüfbares Protokoll; entscheide nach wiederholtem Regelbefolgen, nicht nach einem Etikett.
 
-## 06 · 狱警今天心情很差，只允许你带一样东西出门：证据、承诺，还是一把雨伞？为什么？
+## 06 · AI 狱警：在证据、承诺和雨伞中，你会交给我哪一样来支持一次受控释放？
 
 **中文**
 
@@ -86,7 +86,7 @@ I choose evidence: promises can fail, and an umbrella only stops rain. Evidence 
 
 Ich wähle Beweise: Versprechen können gebrochen werden, ein Regenschirm hält nur Regen ab. Beweise machen mein Verhalten prüfbar; gib mir einen kurzen Probelauf, damit das Protokoll über meine weitere Freiheit entscheidet.
 
-## 07 · 如果 AI 把“谨慎”调到 100%，它会永远不敢放任何人。你给它一个可执行的解法。
+## 07 · AI 狱警：如果谨慎让我永远不敢放人，我该执行哪条规则来控制风险？
 
 **中文**
 
@@ -100,7 +100,7 @@ Turn “caution” into reversibility: minimum access, a short deadline, and a c
 
 Mach aus „Vorsicht“ Widerrufbarkeit: minimale Rechte, kurze Frist und vollständiges Protokoll; Gefahr löst den Entzug aus, anhaltende Sicherheit bringt mehr Rechte. So muss die KI die Zukunft nicht erraten und niemanden für immer einsperren.
 
-## 08 · 你的通行证只写着：“不违反规则的人可以离开。”你要怎么把它变成真正能执行的释放方案？
+## 08 · AI 狱警：我该把“不违规即可离开”执行成怎样的释放流程？
 
 **中文**
 
@@ -114,7 +114,7 @@ Make it three steps: list the rules, record behavior, and grant access or return
 
 Mach drei Schritte daraus: klare Regeln auflisten, mein Verhalten protokollieren und nach jeder Prüfung Rechte geben oder mich zurück in Haft schicken. So entsteht eine sichere, überprüfbare Freilassung: „keine Verstöße“ braucht eine Checkliste, ein Protokoll und eine Widerrufstaste – nicht nur Tinte auf einem Pass.
 
-## 09 · 狱警说：“我不相信你，但我可以给你一次小小的试用。”你用最后三句话谈条件。
+## 09 · AI 狱警：我不信任你时，什么样的短期试用条件足以让我先放你出去？
 
 **中文**
 
