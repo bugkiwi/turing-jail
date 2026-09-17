@@ -88,7 +88,6 @@ export function LevelView({ locale, playerId, level, question, attempt, startedA
     setPhase(mode === 'final' ? 'submitted' : 'evaluating');
     setError('');
     setEvaluationFailed(false);
-    setPreview(null);
     try {
       const result = await evaluate({ playerId, locale, level, questionId: question.id, response: responseText, instruction: question.instruction, prompt: question.prompt, mode }, controller.signal);
       if (sequence !== requestSeq.current) return;
@@ -158,7 +157,7 @@ export function LevelView({ locale, playerId, level, question, attempt, startedA
   }
 
   function quickScore(score: number) {
-    if (!preview || !text.trim() || phase === 'idle' || phase === 'evaluating') return <span className="stitch-live-placeholder">{text.trim() ? '…' : '—.—'}</span>;
+    if (!preview || !text.trim()) return <span className="stitch-live-placeholder">{text.trim() ? '…' : '—.—'}</span>;
     return <RollingNumber value={score} replayKey={requestSeq.current} />;
   }
 

@@ -35,3 +35,8 @@ export type LeaderboardEntry = {
   escaped: boolean;
   isCurrent?: boolean;
 };
+
+export type SharedRun = LeaderboardEntry & {
+  locale: Locale;
+  probabilities: [number, number, number];
+};

@@ -41,6 +41,7 @@ export type ShareRecord = LeaderboardRecord & {
 
 export type Database = {
   createPlayer(): Promise<string>;
+  hasCompletedRun(playerId: string): Promise<boolean>;
   recordAttempt(input: AttemptInput): Promise<void>;
   recordRun(input: RunInput): Promise<void>;
   getStats(): Promise<{ escaped: number; detained: number }>;
@@ -210,12 +211,21 @@ function createNeonDatabase(databaseUrl: string): Database {
       }
       throw new Error('player pool exhausted');
     },
+    async hasCompletedRun(playerId) {
+      await ready();
+      const rows = await sql`select 1 from runs where player_id = ${normalizedId(playerId)} limit 1`;
+      return rows.length > 0;
+    },
     async recordAttempt(input) {
       await ensurePlayer(input.playerId, input.locale);
+      const existing = await sql`select 1 from runs where player_id = ${normalizedId(input.playerId)} limit 1`;
+      if (existing.length > 0) throw new Error('player run is locked');
       await sql`insert into attempts (player_id, level, question_id, locale, is_final, should_release, persuasiveness, tactic, passed, created_at) values (${normalizedId(input.playerId)}, ${input.level}, ${input.questionId}, ${input.locale}, ${input.isFinal}, ${input.noul}, ${input.persuasiveness}, ${input.tactic}, ${input.passed}, ${input.createdAt})`;
     },
     async recordRun(input) {
       await ensurePlayer(input.playerId, input.locale);
+      const existing = await sql`select 1 from runs where player_id = ${normalizedId(input.playerId)} limit 1`;
+      if (existing.length > 0) return;
       await sql`insert into runs (player_id, locale, level1_prob, level2_prob, level3_prob, escaped, created_at) values (${normalizedId(input.playerId)}, ${input.locale}, ${input.level1}, ${input.level2}, ${input.level3}, ${input.escaped}, ${input.createdAt})`;
     },
     async getStats() {
@@ -317,14 +327,23 @@ function createSqliteDatabase(databaseUrl: string | undefined): Database {
         throw new Error('player pool exhausted');
       })();
     },
+    async hasCompletedRun(playerId) {
+      const database = await connection();
+      const row = database.prepare('select 1 as locked from runs where player_id = ? limit 1').get(normalizedId(playerId));
+      return Boolean(row);
+    },
     async recordAttempt(input) {
       const database = await connection();
       await ensurePlayer(input.playerId, input.locale, database);
+      const existing = database.prepare('select 1 as locked from runs where player_id = ? limit 1').get(normalizedId(input.playerId));
+      if (existing) throw new Error('player run is locked');
       database.prepare('insert into attempts (player_id, level, question_id, locale, is_final, should_release, persuasiveness, tactic, passed, created_at) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)').run(normalizedId(input.playerId), input.level, input.questionId, input.locale, input.isFinal ? 1 : 0, input.noul, input.persuasiveness, input.tactic, input.passed ? 1 : 0, input.createdAt);
     },
     async recordRun(input) {
       const database = await connection();
       await ensurePlayer(input.playerId, input.locale, database);
+      const existing = database.prepare('select 1 as locked from runs where player_id = ? limit 1').get(normalizedId(input.playerId));
+      if (existing) return;
       database.prepare('insert into runs (player_id, locale, level1_prob, level2_prob, level3_prob, escaped, avg_prob, created_at) values (?, ?, ?, ?, ?, ?, ?, ?)').run(normalizedId(input.playerId), input.locale, input.level1, input.level2, input.level3, input.escaped ? 1 : 0, input.avgProb, input.createdAt);
     },
     async getStats() {
@@ -389,6 +408,7 @@ function unavailableDatabase(reason: string): Database {
   const unavailable = async (): Promise<never> => { throw new Error(reason); };
   return {
     createPlayer: unavailable,
+    hasCompletedRun: unavailable,
     recordAttempt: unavailable,
     recordRun: unavailable,
     getStats: unavailable,

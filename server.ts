@@ -49,6 +49,12 @@ app.post('/api/evaluate', async (context) => {
   const prompt = typeof body?.prompt === 'string' ? body.prompt.trim() : '';
   if (typeof playerId !== 'string' || !/^[0-9A-F]{6}$/i.test(playerId) || !isLocale(locale) || (mode !== 'realtime' && mode !== 'final') || !Number.isInteger(level) || Number(level) < 1 || Number(level) > 3 || !Number.isInteger(questionId) || prisonerResponse.length === 0 || prisonerResponse.length > 1500 || !instruction || !prompt) return json(context, { error: 'Invalid evaluation payload.' }, 422);
   const normalizedPlayerId = playerId.toUpperCase();
+  try {
+    if (await database.hasCompletedRun(normalizedPlayerId)) return json(context, { error: 'This prisoner ID is locked to a completed run.' }, 409);
+  } catch (error) {
+    console.error('Database lock check error', error);
+    return json(context, { error: 'Database unavailable.' }, 503);
+  }
   const apiKey = env('TYPESAFE_API_KEY');
   if (!apiKey) return json(context, { error: 'TypeSafe API key is not configured.' }, 503);
 

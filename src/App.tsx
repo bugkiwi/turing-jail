@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import type { LevelResult, Locale, View } from './types';
+import type { LevelResult, Locale, SharedRun, View } from './types';
 import { getQuestions, levelQuestionIds } from './content';
-import { ensurePlayer, saveLocale, storedLocale } from './api';
+import { allocatePlayer, ensurePlayer, getSharedRun, saveLocale, storedLocale } from './api';
 import { loadProgress, saveProgress, type SavedProgress } from './progress';
 import { HudHeader } from './components/HudHeader';
 import { AmbientSound } from './components/AmbientSound';
@@ -14,11 +14,23 @@ function pickQuestion(level: 1 | 2 | 3, used: Record<number, number[]>) {
   return remaining[Math.floor(Math.random() * remaining.length)] ?? levelQuestionIds(level)[0];
 }
 
+function readSharedQuery() {
+  const params = new URLSearchParams(window.location.search);
+  const playerId = params.get('id')?.toUpperCase();
+  const locale = params.get('locale')?.toLowerCase();
+  if (!playerId || !/^[0-9A-F]{6}$/.test(playerId) || !['zh', 'en', 'de'].includes(locale ?? '')) return null;
+  return { playerId, locale: locale as Locale };
+}
+
 export default function App() {
+  const [sharedQuery] = useState(readSharedQuery);
   const [savedProgress] = useState<SavedProgress | null>(() => loadProgress());
-  const [locale, setLocale] = useState<Locale>(() => savedProgress?.locale ?? storedLocale());
-  const [playerId, setPlayerId] = useState(savedProgress?.playerId ?? '------');
-  const [view, setView] = useState<View>(savedProgress?.view ?? 'level');
+  const [sharedRun, setSharedRun] = useState<SharedRun | null>(null);
+  const [sharedLoading, setSharedLoading] = useState(Boolean(sharedQuery));
+  const [sharedError, setSharedError] = useState(false);
+  const [locale, setLocale] = useState<Locale>(() => sharedQuery?.locale ?? savedProgress?.locale ?? storedLocale());
+  const [playerId, setPlayerId] = useState(sharedQuery?.playerId ?? savedProgress?.playerId ?? '------');
+  const [view, setView] = useState<View>(sharedQuery ? 'outcome' : savedProgress?.view ?? 'level');
   const [boardReturn, setBoardReturn] = useState<View>('level');
   const [level, setLevel] = useState<1 | 2 | 3>(savedProgress?.level ?? 1);
   const [attempt, setAttempt] = useState(savedProgress?.attempt ?? 1);
@@ -31,14 +43,30 @@ export default function App() {
   const [audioOn, setAudioOn] = useState(false);
 
   useEffect(() => {
+    if (sharedQuery) {
+      let active = true;
+      getSharedRun(sharedQuery.playerId, sharedQuery.locale).then((run) => {
+        if (active) setSharedRun(run);
+      }).catch(() => {
+        if (active) setSharedError(true);
+      }).finally(() => {
+        if (active) setSharedLoading(false);
+      });
+      return () => { active = false; };
+    }
     if (savedProgress?.playerId) window.localStorage.setItem('turingjail_id', savedProgress.playerId);
     ensurePlayer().then(setPlayerId);
-  }, [savedProgress]);
+  }, [savedProgress, sharedQuery]);
 
   useEffect(() => {
-    if (!/^[0-9A-F]{6}$/i.test(playerId)) return;
+    if (sharedQuery || !/^[0-9A-F]{6}$/i.test(playerId)) return;
+    if (runSaved) {
+      window.localStorage.removeItem('turingjail_progress_v1');
+      window.localStorage.removeItem('turingjail_id');
+      return;
+    }
     saveProgress({ playerId, locale, view, level, attempt, questionId, usedQuestions, results, runStartedAt, draft, runSaved });
-  }, [attempt, draft, level, locale, playerId, questionId, results, runSaved, runStartedAt, usedQuestions, view]);
+  }, [attempt, draft, level, locale, playerId, questionId, results, runSaved, runStartedAt, usedQuestions, view, sharedQuery]);
 
   useEffect(() => {
     const language = locale === 'zh' ? 'zh-CN' : locale;
@@ -49,6 +77,7 @@ export default function App() {
   }, [locale]);
 
   function changeLocale(next: Locale) {
+    if (sharedQuery) return;
     if (view === 'level' && results.length > 0) return;
     setLocale(next);
     saveLocale(next);
@@ -59,9 +88,10 @@ export default function App() {
     setView('leaderboard');
   }
 
-  function startRun() {
+  async function startRun() {
+    const nextPlayerId = await allocatePlayer();
     const first = pickQuestion(1, {});
-    setResults([]); setDraft(''); setRunSaved(false); setUsedQuestions({ 1: [first] }); setQuestionId(first); setLevel(1); setAttempt(1); setRunStartedAt(Date.now()); setView('level');
+    setPlayerId(nextPlayerId); setResults([]); setDraft(''); setRunSaved(false); setUsedQuestions({ 1: [first] }); setQuestionId(first); setLevel(1); setAttempt(1); setRunStartedAt(Date.now()); setView('level');
   }
 
   function onLevelResult(result: LevelResult) {
@@ -89,7 +119,7 @@ export default function App() {
       <HudHeader locale={locale} playerId={playerId} audioOn={audioOn} onLocale={changeLocale} onAudio={() => setAudioOn((value) => !value)} onBoard={openBoard} />
       <main className="app-main">
         {view === 'level' && <LevelView key={`${locale}-${level}-${questionId}-${attempt}`} locale={locale} playerId={playerId} level={level} question={getQuestions(locale)[questionId]} attempt={attempt} startedAt={runStartedAt} draft={draft} onDraftChange={setDraft} onResult={onLevelResult} onBoard={openBoard} audioOn={audioOn} />}
-        {view === 'outcome' && <OutcomeView locale={locale} playerId={playerId} results={results} escaped={results.length === 3 && results.every((result) => result.passed)} runSaved={runSaved} onRunSaved={() => setRunSaved(true)} onRetry={startRun} onAppeal={attempt === 1 ? appeal : undefined} onBoard={openBoard} />}
+        {view === 'outcome' && <OutcomeView locale={locale} playerId={playerId} results={results} escaped={results.length === 3 && results.every((result) => result.passed)} runSaved={runSaved} onRunSaved={() => setRunSaved(true)} onRetry={startRun} onAppeal={attempt === 1 ? appeal : undefined} onBoard={openBoard} sharedRequested={Boolean(sharedQuery)} sharedRun={sharedRun} sharedLoading={sharedLoading} sharedError={sharedError} />}
         {view === 'leaderboard' && <LeaderboardView locale={locale} playerId={playerId} onLocale={changeLocale} onBack={() => setView(boardReturn)} />}
       </main>
       <footer className="global-footer"><span>© TURING JAIL / 2026</span><span>NO TEXT GENERATION · STRUCTURED VERDICT ONLY</span><span>EDGE PROXY / NEON ARCHIVE</span></footer>
