@@ -52,6 +52,7 @@ export function LevelView({ locale, playerId, level, question, attempt, startedA
   const [infoOpen, setInfoOpen] = useState(false);
   const activePreset = useRef<PresetKey | null>(null);
   const requestSeq = useRef(0);
+  const requestAbort = useRef<AbortController | null>(null);
   const lastRequestedText = useRef('');
   const timer = useRef<number | undefined>(undefined);
   const threshold = thresholds[level];
@@ -78,28 +79,36 @@ export function LevelView({ locale, playerId, level, question, attempt, startedA
       lastRequestedText.current = responseText.trim();
       requestEvaluation('realtime', responseText, preset);
     }, 200);
-    return () => { if (timer.current) window.clearTimeout(timer.current); };
+    return () => {
+      if (timer.current) window.clearTimeout(timer.current);
+      requestAbort.current?.abort();
+    };
   }, [hasSubmitted, level, locale, playerId, question.id, text]);
 
   async function requestEvaluation(mode: 'realtime' | 'final', responseText = text, preset: PresetKey | null = null) {
     const sequence = ++requestSeq.current;
+    requestAbort.current?.abort();
+    const controller = new AbortController();
+    requestAbort.current = controller;
     setPhase(mode === 'final' ? 'submitted' : 'evaluating');
     setError('');
     try {
-      const result = await evaluate({ playerId, locale, level, questionId: question.id, response: responseText, instruction: question.instruction, prompt: question.prompt, mode });
+      const result = await evaluate({ playerId, locale, level, questionId: question.id, response: responseText, instruction: question.instruction, prompt: question.prompt, mode }, controller.signal);
       if (sequence !== requestSeq.current) return;
       setPreview(result);
       if (result.source === 'typesafe' && preset) setQuickScores((current) => ({ ...current, [preset]: result.noul }));
       setPhase(mode === 'final' ? 'submitted' : 'feedback');
       if (mode === 'final') finish(result);
     } catch {
-      if (sequence !== requestSeq.current) return;
+      if (controller.signal.aborted || sequence !== requestSeq.current) return;
       const result = localEstimate(responseText, level);
       setPreview(result);
       if (preset) setQuickScores((current) => ({ ...current, [preset]: result.noul }));
       setPhase(mode === 'final' ? 'submitted' : 'feedback');
       setError(t.fallback);
       if (mode === 'final') finish(result);
+    } finally {
+      if (requestAbort.current === controller) requestAbort.current = null;
     }
   }
 
@@ -115,6 +124,8 @@ export function LevelView({ locale, playerId, level, question, attempt, startedA
     activePreset.current = preset ?? activePreset.current;
     setSelectedPreset(activePreset.current);
     requestSeq.current += 1;
+    requestAbort.current?.abort();
+    requestAbort.current = null;
     setText(nextText);
     onDraftChange(nextText);
     if (timer.current) window.clearTimeout(timer.current);
@@ -134,6 +145,8 @@ export function LevelView({ locale, playerId, level, question, attempt, startedA
     }
     if (timer.current) window.clearTimeout(timer.current);
     timer.current = undefined;
+    requestAbort.current?.abort();
+    requestAbort.current = null;
     lastRequestedText.current = text.trim();
     requestEvaluation('final', text, activePreset.current);
   }

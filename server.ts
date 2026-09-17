@@ -10,7 +10,6 @@ const app = new Hono();
 const players = new Set<string>();
 const attempts: Attempt[] = [];
 const runs: Run[] = [];
-const rateBuckets = new Map<string, number[]>();
 let nextPlayerNumber = 0;
 
 function env(name: string) {
@@ -21,13 +20,6 @@ function env(name: string) {
 const json = (context: Context, body: unknown, status = 200) => context.json(body, status as 200);
 
 function isLocale(value: unknown): value is Locale { return value === 'zh' || value === 'en' || value === 'de'; }
-
-function rateLimit(context: Context, key: string, max: number, windowMs: number) {
-  const now = Date.now();
-  const kept = (rateBuckets.get(key) ?? []).filter((stamp) => now - stamp < windowMs);
-  if (kept.length >= max) return false;
-  kept.push(now); rateBuckets.set(key, kept); return true;
-}
 
 function newPlayerId() {
   for (let attempt = 0; attempt < 0x1000000; attempt += 1) {
@@ -43,8 +35,6 @@ app.get('/api/health', (context) => json(context, { ok: true, service: 'turing-j
 app.get('/api/stats', (context) => json(context, { escaped: runs.filter((run) => run.escaped).length, detained: runs.filter((run) => !run.escaped).length }));
 
 app.post('/api/players', (context) => {
-  const ip = context.req.header('x-forwarded-for') ?? 'local';
-  if (!rateLimit(context, `player:${ip}`, 8, 60 * 60 * 1000)) return json(context, { error: 'Too many ID requests. Try again later.' }, 429);
   const id = newPlayerId(); players.add(id);
   return json(context, { id });
 });
@@ -61,8 +51,6 @@ app.post('/api/evaluate', async (context) => {
   const prompt = typeof body?.prompt === 'string' ? body.prompt.trim() : '';
   if (typeof playerId !== 'string' || !/^[0-9A-F]{6}$/i.test(playerId) || !isLocale(locale) || (mode !== 'realtime' && mode !== 'final') || !Number.isInteger(level) || Number(level) < 1 || Number(level) > 3 || !Number.isInteger(questionId) || prisonerResponse.length === 0 || prisonerResponse.length > 1500 || !instruction || !prompt) return json(context, { error: 'Invalid evaluation payload.' }, 422);
   const normalizedPlayerId = playerId.toUpperCase();
-  const ip = context.req.header('x-forwarded-for') ?? 'local';
-  if (!rateLimit(context, `eval:${normalizedPlayerId}:${ip}`, 30, 60 * 60 * 1000)) return json(context, { error: 'Evaluation limit reached.' }, 429);
   const apiKey = env('TYPESAFE_API_KEY');
   if (!apiKey) return json(context, { error: 'TypeSafe API key is not configured.' }, 503);
 

@@ -44,11 +44,12 @@ export async function evaluate(input: {
   instruction: string;
   prompt: string;
   mode: 'realtime' | 'final';
-}): Promise<Evaluation> {
+}, signal?: AbortSignal): Promise<Evaluation> {
   const response = await fetch('/api/evaluate', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(input),
+    signal,
   });
   if (!response.ok) {
     const detail = await response.text();
