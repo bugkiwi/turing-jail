@@ -1,6 +1,6 @@
 # Turing Jail
 
-Turing Jail is a three-level persuasion game against TypeSafe's Jev System One model. The frontend is a Vite + React SPA; the Hono API keeps `TYPESAFE_API_KEY` server-side and forwards structured evaluation requests to TypeSafe.
+Turing Jail is a three-level persuasion game against TypeSafe's Jev System One model. The frontend is a Vite + React SPA; the Hono API keeps `TYPESAFE_API_KEY` server-side, forwards structured evaluation requests to TypeSafe, and persists game data in SQLite locally or Neon/Postgres in production.
 
 The app opens directly on Level 01. The leaderboard is available from the interrogation header and keeps the language tabs in one place.
 
@@ -11,7 +11,7 @@ bun install
 bun run dev   # Vite + Hono API, http://localhost:5173
 ```
 
-The Vite dev server proxies `/api` to Hono. Bun loads the existing `.env` automatically, so the API key is never bundled into client code. Player IDs are six-character hexadecimal sequence numbers starting at `#000000` (`#ABCDEF` is valid). The active run (level, question, draft, and completed results) is saved in browser localStorage and restored after refresh. `db/schema.sql` is ready for the Neon/Postgres production adapter; the local Hono process keeps only real completed runs in its live archive, so a fresh process starts with an empty leaderboard.
+The Vite dev server proxies `/api` to Hono. Bun loads `.env` automatically, so the API key is never bundled into client code. Set `DATABASE_URL=file:./turing-jail.sqlite` locally; the SQLite file is created on first API use. In Vercel, set `DATABASE_URL` to the Neon connection string (`postgresql://...`). The API applies the idempotent schema on first database use, and `db/schema.sql` is also available to run manually in Neon. Player IDs are six-character hexadecimal sequence numbers starting at `#000000` (`#ABCDEF` is valid). The active run (level, question, draft, and completed results) is saved in browser localStorage and restored after refresh; players, evaluation attempts, completed runs, statistics, and leaderboard entries are persisted in the database.
 
 ## Verify
 

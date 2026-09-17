@@ -5,6 +5,14 @@ create table if not exists players (
   created_at timestamptz not null default now()
 );
 
+create table if not exists player_counter (
+  singleton smallint primary key check (singleton = 1),
+  next_number integer not null check (next_number between 0 and 16777216)
+);
+
+insert into player_counter (singleton, next_number) values (1, 0)
+on conflict (singleton) do nothing;
+
 create table if not exists attempts (
   id bigserial primary key,
   player_id varchar(6) not null references players(id),

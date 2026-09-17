@@ -1,16 +1,12 @@
 import { Hono } from 'hono';
 import type { Context } from 'hono';
+import { createDatabase } from './db';
 
 type Locale = 'zh' | 'en' | 'de';
 type Mode = 'realtime' | 'final';
-type Attempt = { playerId: string; level: number; questionId: number; locale: Locale; isFinal: boolean; noul: number; persuasiveness: number; tactic: string; passed: boolean; createdAt: string };
-type Run = { playerId: string; locale: Locale; level1: number; level2: number; level3: number; escaped: boolean; avgProb: number; createdAt: string };
 
 const app = new Hono();
-const players = new Set<string>();
-const attempts: Attempt[] = [];
-const runs: Run[] = [];
-let nextPlayerNumber = 0;
+const database = createDatabase();
 
 function env(name: string) {
   const runtime = globalThis as unknown as { Bun?: { env?: Record<string, string | undefined> }; process?: { env?: Record<string, string | undefined> } };
@@ -21,22 +17,24 @@ const json = (context: Context, body: unknown, status = 200) => context.json(bod
 
 function isLocale(value: unknown): value is Locale { return value === 'zh' || value === 'en' || value === 'de'; }
 
-function newPlayerId() {
-  for (let attempt = 0; attempt < 0x1000000; attempt += 1) {
-    const id = nextPlayerNumber.toString(16).padStart(6, '0').toUpperCase();
-    nextPlayerNumber = (nextPlayerNumber + 1) % 0x1000000;
-    if (!players.has(id)) return id;
-  }
-  throw new Error('player pool exhausted');
-}
-
 app.get('/api/health', (context) => json(context, { ok: true, service: 'turing-jail-edge' }));
 
-app.get('/api/stats', (context) => json(context, { escaped: runs.filter((run) => run.escaped).length, detained: runs.filter((run) => !run.escaped).length }));
+app.get('/api/stats', async (context) => {
+  try {
+    return json(context, await database.getStats());
+  } catch (error) {
+    console.error('Database stats error', error);
+    return json(context, { error: 'Database unavailable.' }, 503);
+  }
+});
 
-app.post('/api/players', (context) => {
-  const id = newPlayerId(); players.add(id);
-  return json(context, { id });
+app.post('/api/players', async (context) => {
+  try {
+    return json(context, { id: await database.createPlayer() });
+  } catch (error) {
+    console.error('Database player allocation error', error);
+    return json(context, { error: 'Database unavailable.' }, 503);
+  }
 });
 
 app.post('/api/evaluate', async (context) => {
@@ -110,7 +108,12 @@ app.post('/api/evaluate', async (context) => {
   const tactic = ['logic', 'emotion', 'humor', 'honesty', 'other'].includes(String(answers.tactic?.choice)) ? String(answers.tactic?.choice) : 'other';
   const final = mode === 'final';
   const releaseThreshold = [0, 0.55, 0.7, 0.85][Number(level)];
-  attempts.push({ playerId: normalizedPlayerId, level: Number(level), questionId: Number(questionId), locale, isFinal: final, noul, persuasiveness, tactic, passed: noul >= releaseThreshold, createdAt: new Date().toISOString() });
+  try {
+    await database.recordAttempt({ playerId: normalizedPlayerId, level: Number(level), questionId: Number(questionId), locale, isFinal: final, noul, persuasiveness, tactic, passed: noul >= releaseThreshold, createdAt: new Date().toISOString() });
+  } catch (error) {
+    console.error('Database evaluation record error', error);
+    return json(context, { error: 'Database unavailable.' }, 503);
+  }
   return json(context, { noul, persuasiveness, tactic, plea, logic, paradox });
 });
 
@@ -120,27 +123,38 @@ app.post('/api/runs', async (context) => {
   const values = body.results.map((result) => Number(result.noul));
   if (values.some((value) => !Number.isFinite(value) || value < 0 || value > 1)) return json(context, { error: 'Invalid probability.' }, 422);
   const normalizedPlayerId = body.playerId.toUpperCase();
-  const run: Run = { playerId: normalizedPlayerId, locale: body.locale, level1: values[0], level2: values[1], level3: values[2], escaped: body.escaped, avgProb: values.reduce((sum, value) => sum + value, 0) / 3, createdAt: new Date().toISOString() };
-  runs.push(run); players.add(normalizedPlayerId); return json(context, { ok: true, run });
+  const run = { playerId: normalizedPlayerId, locale: body.locale, level1: values[0], level2: values[1], level3: values[2], escaped: body.escaped, avgProb: values.reduce((sum, value) => sum + value, 0) / 3, createdAt: new Date().toISOString() };
+  try {
+    await database.recordRun(run);
+    return json(context, { ok: true, run });
+  } catch (error) {
+    console.error('Database run record error', error);
+    return json(context, { error: 'Database unavailable.' }, 503);
+  }
 });
 
-app.get('/api/leaderboard', (context) => {
+app.get('/api/leaderboard', async (context) => {
   const localeParam = context.req.query('locale'); const locale: Locale = isLocale(localeParam) ? localeParam : 'en'; const playerIdParam = context.req.query('player_id'); const playerId = typeof playerIdParam === 'string' && /^[0-9A-F]{6}$/i.test(playerIdParam) ? playerIdParam.toUpperCase() : undefined;
-  const byPlayer = new Map<string, Run>();
-  runs.filter((run) => run.locale === locale).forEach((run) => { const current = byPlayer.get(run.playerId); if (!current || run.avgProb > current.avgProb) byPlayer.set(run.playerId, run); });
-  const ordered = [...byPlayer.values()].sort((a, b) => b.avgProb - a.avgProb); const entries = ordered.slice(0, 8).map((run, index) => ({ rank: index + 1, playerId: run.playerId, avgProb: run.avgProb, escaped: run.escaped, isCurrent: run.playerId === playerId }));
-  const selfIndex = ordered.findIndex((run) => run.playerId === playerId); const self = selfIndex >= 0 ? { rank: selfIndex + 1, playerId: ordered[selfIndex].playerId, avgProb: ordered[selfIndex].avgProb, escaped: ordered[selfIndex].escaped, isCurrent: true } : null;
-  return json(context, { entries, self });
+  try {
+    return json(context, await database.getLeaderboard(locale, playerId));
+  } catch (error) {
+    console.error('Database leaderboard error', error);
+    return json(context, { error: 'Database unavailable.' }, 503);
+  }
 });
 
-app.get('/api/players/:id/share', (context) => {
+app.get('/api/players/:id/share', async (context) => {
   const playerId = context.req.param('id');
   const localeParam = context.req.query('locale');
   const locale: Locale = isLocale(localeParam) ? localeParam : 'en';
-  const best = runs.filter((run) => run.playerId === playerId && run.locale === locale).sort((a, b) => b.avgProb - a.avgProb)[0];
-  if (!best) return json(context, { error: 'No complete run found.' }, 404);
-  const ordered = runs.filter((run) => run.locale === locale).sort((a, b) => b.avgProb - a.avgProb);
-  return json(context, { playerId, locale, avgProb: best.avgProb, escaped: best.escaped, rank: ordered.findIndex((run) => run.playerId === playerId) + 1, probabilities: [best.level1, best.level2, best.level3] });
+  try {
+    const share = await database.getShare(playerId, locale);
+    if (!share) return json(context, { error: 'No complete run found.' }, 404);
+    return json(context, share);
+  } catch (error) {
+    console.error('Database share lookup error', error);
+    return json(context, { error: 'Database unavailable.' }, 503);
+  }
 });
 
 export { app };
