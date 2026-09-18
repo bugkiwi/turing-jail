@@ -41,6 +41,7 @@ type PresetKey = keyof typeof presetText.zh;
 
 export function LevelView({ locale, playerId, level, question, attempt, startedAt, draft, onDraftChange, onResult, onBoard, audioOn }: Props) {
   const t = copy[locale];
+  const seoTitle = locale === 'zh' ? 'Turing Jail — TypeSafe Jev System One AI 审讯游戏' : locale === 'de' ? 'Turing Jail — TypeSafe Jev System One KI-Verhörspiel' : 'Turing Jail — TypeSafe Jev System One AI Interrogation Game';
   const [text, setText] = useState(draft);
   const [preview, setPreview] = useState<Evaluation | null>(null);
   const [phase, setPhase] = useState<'idle' | 'evaluating' | 'feedback' | 'submitted'>('idle');
@@ -172,7 +173,7 @@ export function LevelView({ locale, playerId, level, question, attempt, startedA
 
   return (
     <div className={`stitch-level-view page-enter ${levelState}`}>
-      <h1 className="stitch-seo-title">Turing Jail — TypeSafe Jev System One AI Interrogation</h1>
+      <h1 className="stitch-seo-title">{seoTitle}</h1>
       {doorText && <div className={`stitch-door-status state-${doorState}`}><span />{doorText}</div>}
       <div className="stitch-warden-eye-glow" />
       <div className="stitch-level-progress" aria-label={`${t.level} ${level} / 3`}><span className="active">{t.level} 0{level}</span><i /><span className={level >= 2 ? 'active' : ''}>02</span><i /><span className={level >= 3 ? 'active' : ''}>03</span></div>

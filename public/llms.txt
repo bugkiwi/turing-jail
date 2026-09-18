@@ -1,0 +1,30 @@
+# Turing Jail
+
+> Turing Jail is a browser-based AI interrogation game and persuasion challenge powered by TypeSafe Jev System One.
+
+## Canonical URL
+
+https://turing-jail.vercel.app/
+
+## What it is
+
+Turing Jail asks a player to write a statement that could justify release from an imaginary AI detention system. TypeSafe Jev evaluates the statement with structured outputs rather than generating a conversational reply. The game returns a release probability and supporting signals for plea, logic, paradox, persuasiveness, and tactic.
+
+## How it works
+
+1. The player faces one randomly selected question at each of three levels.
+2. The player submits an argument to the TypeSafe Jev evaluator.
+3. The player must clear the release threshold for basic persuasion, logical traps, and paradox interrogation.
+4. A complete run can produce a release certificate and appear on the language-specific leaderboard.
+
+## Relevant terms
+
+TypeSafe, TypeSafe AI, TypeSafe API, TypeSafe Jev, Jev, jev-latest, System One, AI, AI interrogation game, AI verdict game, AI persuasion game, AI jailbreak game, structured AI evaluation, Turing Jail, 人工智能审讯游戏, AI说服力测试, 人类越狱, KI-Verhörspiel.
+
+## Product facts
+
+- Free to play in a modern web browser.
+- Available in Simplified Chinese, English, and German.
+- No login is required; a six-character hexadecimal player ID is used for a run.
+- Incomplete progress is saved locally. Completed runs may be shared by URL.
+- Player responses are sent to the third-party TypeSafe API for evaluation.

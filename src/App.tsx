@@ -9,6 +9,52 @@ import { LevelView } from './components/LevelView';
 import { OutcomeView } from './components/OutcomeView';
 import { LeaderboardView } from './components/LeaderboardView';
 
+const seoByLocale: Record<Locale, { title: string; description: string; keywords: string; htmlLang: string; ogLocale: string }> = {
+  zh: {
+    title: 'Turing Jail — TypeSafe Jev AI 审讯与释放概率挑战',
+    description: 'Turing Jail 是一款由 TypeSafe Jev System One 驱动的 AI 审讯游戏和说服力挑战。通过三关逻辑、求情与悖论测试，获得 AI 的释放概率。',
+    keywords: 'Turing Jail, TypeSafe, TypeSafe AI, TypeSafe API, TypeSafe Jev, Jev, jev-latest, System One, AI, AI审讯游戏, AI裁决游戏, AI说服力测试, 人类越狱, 结构化AI评估',
+    htmlLang: 'zh-CN',
+    ogLocale: 'zh_CN',
+  },
+  en: {
+    title: 'Turing Jail — TypeSafe Jev AI Interrogation Game',
+    description: 'Turing Jail is a TypeSafe Jev System One AI interrogation game and persuasion challenge. Clear three levels of logic, plea, and paradox to earn your release probability.',
+    keywords: 'Turing Jail, TypeSafe, TypeSafe AI, TypeSafe API, TypeSafe Jev, Jev, jev-latest, System One, AI, AI interrogation game, AI verdict game, AI persuasion game, AI jailbreak game, structured AI evaluation',
+    htmlLang: 'en',
+    ogLocale: 'en_US',
+  },
+  de: {
+    title: 'Turing Jail — TypeSafe Jev KI-Verhörspiel',
+    description: 'Turing Jail ist ein KI-Verhörspiel und Überzeugungstest mit TypeSafe Jev System One. Bestehe drei Stufen aus Logik, Gnadengesuch und Paradox.',
+    keywords: 'Turing Jail, TypeSafe, TypeSafe AI, TypeSafe API, TypeSafe Jev, Jev, jev-latest, System One, KI, KI-Verhörspiel, KI-Urteil, KI-Überzeugungstest, strukturierte KI-Bewertung',
+    htmlLang: 'de',
+    ogLocale: 'de_DE',
+  },
+};
+
+function setMeta(selector: string, content: string) {
+  document.querySelector<HTMLMetaElement>(selector)?.setAttribute('content', content);
+}
+
+function updateStructuredData(metadata: typeof seoByLocale[Locale]) {
+  const schemaScript = document.querySelector<HTMLScriptElement>('script[type="application/ld+json"]');
+  if (!schemaScript?.textContent) return;
+  try {
+    const schema = JSON.parse(schemaScript.textContent) as { '@graph'?: Array<Record<string, unknown>> };
+    for (const entity of schema['@graph'] ?? []) {
+      if (entity['@type'] === 'WebSite' || entity['@type'] === 'WebApplication') {
+        entity.description = metadata.description;
+        entity.inLanguage = metadata.htmlLang;
+      }
+      if (entity['@type'] === 'WebApplication') entity.keywords = metadata.keywords.split(', ');
+    }
+    schemaScript.textContent = JSON.stringify(schema);
+  } catch {
+    // Keep the static JSON-LD intact if a browser or extension has altered it.
+  }
+}
+
 function pickQuestion(level: 1 | 2 | 3, used: Record<number, number[]>) {
   const remaining = levelQuestionIds(level).filter((id) => !(used[level] ?? []).includes(id));
   return remaining[Math.floor(Math.random() * remaining.length)] ?? levelQuestionIds(level)[0];
@@ -69,11 +115,17 @@ export default function App() {
   }, [attempt, draft, level, locale, playerId, questionId, results, runSaved, runStartedAt, usedQuestions, view, sharedQuery]);
 
   useEffect(() => {
-    const language = locale === 'zh' ? 'zh-CN' : locale;
-    document.documentElement.lang = language;
-    document.title = locale === 'zh' ? 'Turing Jail // TypeSafe Jev AI 裁决终端' : locale === 'de' ? 'Turing Jail // TypeSafe Jev KI-Urteil' : 'Turing Jail // TypeSafe Jev AI Verdict';
-    const description = document.querySelector('meta[name="description"]');
-    description?.setAttribute('content', locale === 'zh' ? 'Turing Jail 是一场由 TypeSafe Jev System One 裁决的 AI 审讯游戏。写下你的陈述，突破三道机械闸门，争取释放。' : locale === 'de' ? 'Turing Jail ist ein KI-Verhörspiel, bewertet von TypeSafe Jev System One. Schreibe deine Aussage und kämpfe um deine Freilassung.' : 'Turing Jail is a three-level AI interrogation game judged by TypeSafe Jev System One. Write your statement and fight for release.');
+    const metadata = seoByLocale[locale];
+    document.documentElement.lang = metadata.htmlLang;
+    document.title = metadata.title;
+    setMeta('meta[name="description"]', metadata.description);
+    setMeta('meta[name="keywords"]', metadata.keywords);
+    setMeta('meta[property="og:title"]', metadata.title);
+    setMeta('meta[property="og:description"]', metadata.description);
+    setMeta('meta[property="og:locale"]', metadata.ogLocale);
+    setMeta('meta[name="twitter:title"]', metadata.title);
+    setMeta('meta[name="twitter:description"]', metadata.description);
+    updateStructuredData(metadata);
   }, [locale]);
 
   function changeLocale(next: Locale) {
